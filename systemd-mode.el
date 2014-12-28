@@ -90,11 +90,13 @@ as a list of strings, otherwise nil."
   "Open URL.  Interactively completes the documentation in the
 current unit file, defaulting to the link under point, if any."
   (interactive
-   (let* ((uri (thing-at-point-url-at-point))
+   (let* ((collection (systemd-doc-find))
+          (uri (or (thing-at-point-url-at-point)
+                   (car-safe collection)))
           (prompt (concat "URL"
                           (when uri (format " (default %s)" uri))
                           ": ")))
-     (list (completing-read prompt (systemd-doc-find) nil nil nil nil uri))))
+     (list (completing-read prompt collection nil nil nil nil uri))))
   (let ((link (url-generic-parse-url url)))
     (pcase (url-type link)
       ("file" (find-file (url-filename link)))
