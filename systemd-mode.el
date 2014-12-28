@@ -68,7 +68,7 @@ the value."
   (save-excursion
     (let ((break "\\\\\n")
           end)
-      (while (progn (goto-char (- (line-end-position) 1))
+      (while (progn (goto-char (1- (line-end-position)))
                     (looking-at break))
         (forward-line))
       (setq end (line-end-position))
@@ -102,7 +102,7 @@ current unit file, defaulting to the link under point, if any."
       ("file" (find-file (url-filename link)))
       ("man" (url-man link))
       ("info" (url-info link))
-      ((or "http" "https") (apply systemd-browse-url-function `(,url)))
+      ((or "http" "https") (funcall systemd-browse-url-function url))
       (_ (user-error "Invalid link")))))
 
 (defvar systemd-mode-syntax-table
