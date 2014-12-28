@@ -2,3 +2,11 @@ systemd-mode.el
 ===============
 
 Major mode for editing systemd units in GNU Emacs.
+
+Installation
+------------
+
+To install, do
+
+  make
+  make install
