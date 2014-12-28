@@ -1,0 +1,4 @@
+systemd-mode.el
+===============
+
+Major mode for editing systemd units in GNU Emacs.
