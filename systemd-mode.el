@@ -1,6 +1,6 @@
 ;;; systemd-mode.el --- Major mode for editing systemd units
 
-;; Copyright (C) 2014  Mark Oteiza <mvoteiza@udel.edu>
+;; Copyright (C) 2014-2015  Mark Oteiza <mvoteiza@udel.edu>
 
 ;; Author: Mark Oteiza <mvoteiza@udel.edu>
 ;; Keywords: tools, unix
