@@ -31,14 +31,16 @@
 
 (defcustom systemd-browse-url-function 'eww
   "Browser to use for HTTP(S) documentation."
-  :group 'systemd
-  :type '(choice function))
+  :type '(radio (function-item eww)
+                (function-item browse-url)
+                (function :tag "Other function"))
+  :group 'systemd)
 
 (defcustom systemd-comment-start "#"
   "String to insert to start a new comment."
-  :group 'systemd
   :type '(choice (string :tag "Comment sign" "#")
-                 (string :tag "Semicolon" ";")))
+                 (string :tag "Semicolon" ";"))
+  :group 'systemd)
 
 (defvar systemd-font-lock-keywords
   `(
