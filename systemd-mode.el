@@ -143,8 +143,7 @@ Key bindings:
 \\{systemd-mode-map}"
   (set-syntax-table systemd-mode-syntax-table)
   (setq-local comment-start systemd-comment-start)
-  (setq-local font-lock-defaults '(systemd-font-lock-keywords))
-  (run-mode-hooks 'systemd-mode-hook))
+  (setq-local font-lock-defaults '(systemd-font-lock-keywords)))
 
 (provide 'systemd-mode)
 
