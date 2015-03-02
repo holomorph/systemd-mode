@@ -3,6 +3,7 @@
 ;; Copyright (C) 2014-2015  Mark Oteiza <mvoteiza@udel.edu>
 
 ;; Author: Mark Oteiza <mvoteiza@udel.edu>
+;; Version: 1.0
 ;; Keywords: tools, unix
 
 ;; This file is free software; you can redistribute it and/or
@@ -43,8 +44,7 @@
   :group 'systemd)
 
 (defvar systemd-font-lock-keywords
-  `(
-    ("^\\([#;]\\(.*\\)\\)$"
+  `(("^\\([#;]\\(.*\\)\\)$"
      (1 'font-lock-comment-delimiter-face)
      (2 'font-lock-comment-face))
     ("\\\\$" 0 'font-lock-warning-face) ; line break
@@ -58,8 +58,7 @@
     ("=\\(1\\|yes\\|true\\|on\\|0\\|no\\|false\\|off\\)$"
      1 'font-lock-constant-face)
     ;; specifiers
-    ("%[nNpPiIfcrRtuUhsmbHv%]" 0 'font-lock-constant-face)
-    )
+    ("%[nNpPiIfcrRtuUhsmbHv%]" 0 'font-lock-constant-face))
   "Default expressions to highlight in `systemd-mode'. See systemd.unit(5)
 for details on unit file syntax.")
 
@@ -141,7 +140,6 @@ at mode initialization.
 
 Key bindings:
 \\{systemd-mode-map}"
-  (set-syntax-table systemd-mode-syntax-table)
   (setq-local comment-start systemd-comment-start)
   (setq-local font-lock-defaults '(systemd-font-lock-keywords)))
 
