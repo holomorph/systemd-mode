@@ -35,6 +35,7 @@
 
 (defgroup systemd ()
   "Major mode for editing systemd units."
+  :link '(url-link "http://www.freedesktop.org/wiki/Software/systemd/")
   :group 'tools)
 
 (defcustom systemd-browse-url-function 'eww
