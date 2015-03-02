@@ -21,6 +21,13 @@
 
 ;;; Commentary:
 
+;; Major mode for editing systemd units.
+
+;; Reflects a stripped down conf-mode, except with strict regex for
+;; whitespace, and highlighting for special syntax, such as specifiers
+;; and booleans.  Features a facility for browsing documentation: use
+;; C-c C-o to open links to documentation in a unit.
+
 ;;; Code:
 
 (require 'thingatpt)
