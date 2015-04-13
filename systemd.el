@@ -1,4 +1,4 @@
-;;; systemd-mode.el --- Major mode for editing systemd units
+;;; systemd.el --- Major mode for editing systemd units
 
 ;; Copyright (C) 2014-2015  Mark Oteiza <mvoteiza@udel.edu>
 
@@ -151,6 +151,6 @@ Key bindings:
   (setq-local comment-start systemd-comment-start)
   (setq-local font-lock-defaults '(systemd-font-lock-keywords)))
 
-(provide 'systemd-mode)
+(provide 'systemd)
 
-;;; systemd-mode.el ends here
+;;; systemd.el ends here
