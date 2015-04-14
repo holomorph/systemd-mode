@@ -33,6 +33,8 @@
 (require 'thingatpt)
 (require 'url-parse)
 
+(require 'systemd-company)
+
 (defgroup systemd ()
   "Major mode for editing systemd units."
   :link '(url-link "http://www.freedesktop.org/wiki/Software/systemd/")
@@ -49,6 +51,11 @@
   "String to insert to start a new comment."
   :type '(choice (string :tag "Comment sign" "#")
                  (string :tag "Semicolon" ";"))
+  :group 'systemd)
+
+(defcustom systemd-use-company-p t
+  "Whether to use `company-mode' for completion, if available."
+  :type 'boolean
   :group 'systemd)
 
 (defvar systemd-font-lock-keywords
@@ -148,6 +155,7 @@ at mode initialization.
 
 Key bindings:
 \\{systemd-mode-map}"
+  (systemd-company--setup systemd-use-company-p)
   (setq-local comment-start systemd-comment-start)
   (setq-local font-lock-defaults '(systemd-font-lock-keywords)))
 
