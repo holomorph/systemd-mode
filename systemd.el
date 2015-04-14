@@ -145,6 +145,7 @@ current unit file, defaulting to the link under point, if any."
 ;;;###autoload (add-to-list 'auto-mode-alist '("\\.link\\'" . systemd-mode))
 ;;;###autoload (add-to-list 'auto-mode-alist '("\\.netdev\\'" . systemd-mode))
 ;;;###autoload (add-to-list 'auto-mode-alist '("\\.network\\'" . systemd-mode))
+;;;###autoload (add-to-list 'auto-mode-alist '("\\.override\\.conf.*\\'" . systemd-mode))
 
 ;;;###autoload
 (define-derived-mode systemd-mode fundamental-mode "Systemd"
