@@ -139,6 +139,7 @@ current unit file, defaulting to the link under point, if any."
 ;;;###autoload (add-to-list 'auto-mode-alist '("\\.busname\\'" . systemd-mode))
 ;;;###autoload (add-to-list 'auto-mode-alist '("\\.mount\\'" . systemd-mode))
 ;;;###autoload (add-to-list 'auto-mode-alist '("\\.service\\'" . systemd-mode))
+;;;###autoload (add-to-list 'auto-mode-alist '("\\.slice\\'" . systemd-mode))
 ;;;###autoload (add-to-list 'auto-mode-alist '("\\.socket\\'" . systemd-mode))
 ;;;###autoload (add-to-list 'auto-mode-alist '("\\.target\\'" . systemd-mode))
 ;;;###autoload (add-to-list 'auto-mode-alist '("\\.timer\\'" . systemd-mode))
