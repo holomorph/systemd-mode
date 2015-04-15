@@ -1,4 +1,4 @@
-NAME = systemd-mode
+SRC = systemd.el systemd-company.el
 
 PREFIX = /usr/local
 datarootdir := $(PREFIX)/share
@@ -6,16 +6,16 @@ emacsdir := $(datarootdir)/emacs/site-lisp
 
 EMACS = emacs
 
-all: $(NAME).elc
+all: $(SRC:.el=.elc)
 
 clean:
-	$(RM) $(NAME).elc
+	$(RM) $(SRC:.el=.elc)
 
 install:
-	install -d $(DESTDIR)$(emacsdir)/$(NAME)
-	install -m644 $(NAME).{el,elc} $(DESTDIR)$(emacsdir)/$(NAME)
+	install -d $(DESTDIR)$(emacsdir)/systemd
+	install -m644 $(SRC) $(SRC:.el=.elc) -t $(DESTDIR)$(emacsdir)/systemd
 
 .el.elc:
-	$(EMACS) --batch -f batch-byte-compile $<
+	$(EMACS) -L . --batch -f batch-byte-compile $<
 
 .PHONY: all clean install
