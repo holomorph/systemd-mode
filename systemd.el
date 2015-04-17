@@ -26,7 +26,10 @@
 ;; Reflects a stripped down conf-mode, except with strict regex for
 ;; whitespace, and highlighting for special syntax, such as specifiers
 ;; and booleans.  Features a facility for browsing documentation: use
-;; C-c C-o to open links to documentation in a unit.
+;; C-c C-o to open links to documentation in a unit (cf. systemctl
+;; help).
+
+;; Supports completion of unit directives via `company-mode'.
 
 ;;; Code:
 
