@@ -3,7 +3,7 @@
 ;; Copyright (C) 2014-2015  Mark Oteiza <mvoteiza@udel.edu>
 
 ;; Author: Mark Oteiza <mvoteiza@udel.edu>
-;; Version: 1.0
+;; Version: 1.2
 ;; Keywords: tools, unix
 
 ;; This file is free software; you can redistribute it and/or
