@@ -6,7 +6,12 @@ Major mode for editing systemd units in GNU Emacs.
 Installation
 ------------
 
-To install, do
+In Emacs 25 or later, one can locally install as a package with
+
+  M-x package-install-file RET /path/to/systemd-mode RET
+
+Otherwise, for either installing into one's `load-path` or a system
+install, do the usual
 
   make
   make install
