@@ -124,7 +124,8 @@ as a list of strings, otherwise nil."
   "Open URL.  Interactively completes the documentation in the
 current unit file, defaulting to the link under point, if any."
   (interactive
-   (let* ((collection (systemd-doc-find))
+   (let* ((completion-cycle-threshold t)
+          (collection (systemd-doc-find))
           (uri (or (thing-at-point-url-at-point)
                    (car-safe collection)))
           (prompt (concat "URL"
