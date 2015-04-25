@@ -125,6 +125,11 @@ current unit file, defaulting to the link under point, if any."
       ((or "http" "https") (funcall systemd-browse-url-function url))
       (_ (user-error "Invalid link")))))
 
+(defun systemd-doc-directives ()
+  "Open systemd.directives(7)"
+  (interactive)
+  (man "systemd.directives(7)"))
+
 (defvar systemd-mode-syntax-table
   (let ((table (make-syntax-table)))
     (modify-syntax-entry ?\" ".   " table)
@@ -135,6 +140,7 @@ current unit file, defaulting to the link under point, if any."
 
 (defvar systemd-mode-map
   (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-c C-d") 'systemd-doc-directives)
     (define-key map (kbd "C-c C-o") 'systemd-doc-open)
     map)
   "Keymap used in `systemd-mode' buffers.")
