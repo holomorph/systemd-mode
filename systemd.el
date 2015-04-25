@@ -57,6 +57,13 @@
                  (string :tag "Semicolon" ";"))
   :group 'systemd)
 
+(defcustom systemd-man-function 'man
+  "Pager to use for system manual pages."
+  :type '(radio (function-item man)
+                (function-item woman)
+                (function :tag "Other function"))
+  :group 'systemd)
+
 (defcustom systemd-use-company-p t
   "Whether to use `company-mode' for completion, if available."
   :type 'boolean
@@ -106,6 +113,13 @@ as a list of strings, otherwise nil."
     (when string
       (split-string string))))
 
+(defun systemd-doc-man (page)
+  "Open a manual page with `systemd-man-function'."
+  (pcase (symbol-name systemd-man-function)
+    ("woman" (woman (replace-regexp-in-string "([[:alnum:]]+)" "" page)))
+    ("man" (man page))
+    (_ (apply 'systemd-man-function page))))
+
 (defun systemd-doc-open (url)
   "Open URL.  Interactively completes the documentation in the
 current unit file, defaulting to the link under point, if any."
@@ -120,7 +134,7 @@ current unit file, defaulting to the link under point, if any."
   (let ((link (url-generic-parse-url url)))
     (pcase (url-type link)
       ("file" (find-file (url-filename link)))
-      ("man" (url-man link))
+      ("man" (systemd-doc-man (url-filename link)))
       ("info" (url-info link))
       ((or "http" "https") (funcall systemd-browse-url-function url))
       (_ (user-error "Invalid link")))))
@@ -128,7 +142,7 @@ current unit file, defaulting to the link under point, if any."
 (defun systemd-doc-directives ()
   "Open systemd.directives(7)"
   (interactive)
-  (man "systemd.directives(7)"))
+  (systemd-doc-man "systemd.directives(7)"))
 
 (defvar systemd-mode-syntax-table
   (let ((table (make-syntax-table)))
