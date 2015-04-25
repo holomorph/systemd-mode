@@ -43,10 +43,11 @@
   :link '(url-link "http://www.freedesktop.org/wiki/Software/systemd/")
   :group 'tools)
 
-(defcustom systemd-browse-url-function 'eww
+(defcustom systemd-browse-url-function 'browse-url
   "Browser to use for HTTP(S) documentation."
-  :type '(radio (function-item eww)
-                (function-item browse-url)
+  :type `(radio (function-item browse-url)
+                ,@(when (fboundp 'eww) '((function-item eww)))
+                ,@(when (fboundp 'w3m-browse-url) '((function-item w3m-browse-url)))
                 (function :tag "Other function"))
   :group 'systemd)
 
