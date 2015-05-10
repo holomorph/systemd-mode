@@ -4,6 +4,7 @@
 
 ;; Author: Mark Oteiza <mvoteiza@udel.edu>
 ;; Version: 1.2
+;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: tools, unix
 
 ;; This file is free software; you can redistribute it and/or
