@@ -1,4 +1,4 @@
-;;; systemd-company.el --- company backend for systemd unit directives
+;;; systemd-company.el --- company backend for systemd unit directives -*- lexical-binding: t -*-
 
 ;; Copyright (C) 2015  Mark Oteiza <mvoteiza@udel.edu>
 
