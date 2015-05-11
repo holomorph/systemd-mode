@@ -21,6 +21,8 @@
 
 ;;; Code:
 
+(require 'cl-lib)
+
 (declare-function company-mode "company")
 (declare-function company-begin-backend "company")
 (declare-function company-grab-symbol "company")
