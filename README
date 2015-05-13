@@ -7,6 +7,8 @@ in `systemd.el`.
 Installation
 ------------
 
+Available as the `systemd' package on MELPA <http://melpa.org/>.
+
 In Emacs 25 or later, one can locally install as a package with
 
   M-x package-install-file RET /path/to/systemd-mode RET
