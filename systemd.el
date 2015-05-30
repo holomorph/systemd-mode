@@ -71,7 +71,7 @@
   :group 'systemd)
 
 (defvar systemd-font-lock-keywords
-  `(("^\\([#;]\\(.*\\)\\)$"
+  `(("^\\([#;]\\)\\(.*\\)$"
      (1 'font-lock-comment-delimiter-face)
      (2 'font-lock-comment-face))
     ("\\\\$" 0 'font-lock-warning-face) ; line break
