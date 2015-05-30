@@ -93,9 +93,9 @@ for details on unit file syntax.")
   "Joins lines in the key value starting at buffer position START,
 possibly broken by a backslash, and returns a string containing
 the value."
-  (save-excursion
-    (let ((break "\\\\\n")
-          end)
+  (let ((break "\\\\\n")
+        end)
+    (save-excursion
       (while (progn (goto-char (1- (line-end-position)))
                     (looking-at break))
         (forward-line))
