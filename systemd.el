@@ -112,7 +112,7 @@ as a list of strings, otherwise nil."
       (while (re-search-forward key nil t)
         (setq string (concat string " " (systemd-get-value (point))))))
     (when string
-      (split-string string))))
+      (remove "\\" (split-string string)))))
 
 (defun systemd-doc-man (page)
   "Open a manual page with `systemd-man-function'."
