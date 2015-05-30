@@ -105,7 +105,7 @@
     "TimerSlackNSec" "Transparent" "Type" "UMask" "Unit" "User"
     "UtmpIdentifier" "WakeSystem" "WantedBy" "Wants" "WatchdogSec" "What"
     "Where" "WorkingDirectory")
-  "Configuration directives for systemd 219.")
+  "Configuration directives for systemd 220.")
 
 (defun systemd-company--setup (enable)
   (when (fboundp 'systemd-company--setup-company)
