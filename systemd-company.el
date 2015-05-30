@@ -113,14 +113,14 @@
 
 (with-eval-after-load "company"
   (defun systemd-company-backend (command &optional arg &rest ignored)
-     (interactive (list 'interactive))
-     (cl-case command
-       (interactive (company-begin-backend 'systemd-company-backend))
-       (prefix (and (eq major-mode 'systemd-mode)
-                    (company-grab-symbol)))
-       (candidates
-        (cl-remove-if-not (lambda (c) (string-prefix-p arg c))
-                          systemd-company-directives))))
+    (interactive (list 'interactive))
+    (cl-case command
+      (interactive (company-begin-backend 'systemd-company-backend))
+      (prefix (and (eq major-mode 'systemd-mode)
+                   (company-grab-symbol)))
+      (candidates
+       (cl-remove-if-not (lambda (c) (string-prefix-p arg c))
+                         systemd-company-directives))))
   (defun systemd-company--setup-company (enable)
     (when enable
       (add-to-list (make-local-variable 'company-backends) 'systemd-company-backend))
