@@ -27,7 +27,7 @@
 (declare-function company-begin-backend "company")
 (declare-function company-grab-symbol "company")
 
-(defconst systemd-company-directives
+(defconst systemd-company-unit-directives
   ;; TODO: keep a script of sorts for generating this list.  systemd
   ;; source has a python script in tools/ for parsing the
   ;; documentation xml for the unit directives.
@@ -105,7 +105,39 @@
     "TimerSlackNSec" "Transparent" "Type" "UMask" "Unit" "User"
     "UtmpIdentifier" "WakeSystem" "WantedBy" "Wants" "WatchdogSec" "What"
     "Where" "WorkingDirectory")
-  "Configuration directives for systemd 220.")
+  "Configuration directives for systemd 224.")
+
+(defconst systemd-company-network-directives
+  ;; /Network directives/,/Journal fields/p
+  '("ARPAllTargets" "ARPIPTargets" "ARPIntervalSec" "ARPProxy" "ARPValidate"
+    "AdSelect" "Address" "AllSlavesActive" "AllowPortToBeRoot"
+    "Architecture" "BindCarrier" "BitsPerSecond" "Bond" "Bridge"
+    "ClientIdentifier" "CopyDSCP" "Cost" "CriticalConnection" "DHCP"
+    "DHCPServer" "DNS" "Destination" "DiscoverPathMTU" "Domains"
+    "DownDelaySec" "Driver" "Duplex" "FDBAgeingSec" "FailOverMACPolicy"
+    "FallbackDNS" "FallbackNTP" "FastLeave" "Gateway" "GratuitousARP"
+    "GroupPolicyExtension" "HairPin" "Host" "Hostname" "IPForward"
+    "IPMasquerade" "IPv4LLRoute" "IPv6FlowLabel" "IPv6PrivacyExtensions"
+    "IPv6Token" "Id" "KernelCommandLine" "Kind" "L2MissNotification"
+    "L3MissNotification" "LACPTransmitRate" "LLDP" "LLMNR" "Label"
+    "LearnPacketIntervalSec" "LinkLocalAddressing" "Local" "MACAddress"
+    "MACAddressPolicy" "MACVLAN" "MIIMonitorSec" "MTUBytes" "MacLearning"
+    "Metric" "MinLinks" "Mode" "MultiQueue" "NTP" "Name" "NamePolicy"
+    "OneQueue" "OriginalName" "PacketInfo" "PacketsPerSlave" "Path" "Peer"
+    "PrimaryReselectPolicy" "Remote" "RequestBroadcast" "ResendIGMP"
+    "RouteMetric" "RouteShortCircuit" "Scope" "SendHostname" "Source" "TOS"
+    "TTL" "TransmitHashPolicy" "Tunnel" "UDP6ZeroCheckSumRx"
+    "UDP6ZeroChecksumTx" "UDPCheckSum" "UnicastFlood" "UpDelaySec" "UseBPDU"
+    "UseDNS" "UseDomains" "UseHostname" "UseMTU" "UseNTP" "UseRoutes" "VLAN"
+    "VLANId" "VNetHeader" "VXLAN" "VendorClassIdentifier" "Virtualization"
+    "WakeOnLan")
+  "Network configuration directives for systemd 224.")
+
+(defconst systemd-company-directives
+  (append systemd-company-unit-directives systemd-company-network-directives)
+  "Configuration directives for systemd.
+Combination of `systemd-company-unit-directives' and
+`systemd-company-network-directives'.")
 
 (defun systemd-company--setup (enable)
   (when (fboundp 'systemd-company--setup-company)
