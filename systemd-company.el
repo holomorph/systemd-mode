@@ -113,7 +113,7 @@
     "AdSelect" "Address" "AllSlavesActive" "AllowPortToBeRoot"
     "Architecture" "BindCarrier" "BitsPerSecond" "Bond" "Bridge"
     "ClientIdentifier" "CopyDSCP" "Cost" "CriticalConnection" "DHCP"
-    "DHCPServer" "DNS" "Destination" "DiscoverPathMTU" "Domains"
+    "DHCPServer" "DNS" "Description" "Destination" "DiscoverPathMTU" "Domains"
     "DownDelaySec" "Driver" "Duplex" "FDBAgeingSec" "FailOverMACPolicy"
     "FallbackDNS" "FallbackNTP" "FastLeave" "Gateway" "GratuitousARP"
     "GroupPolicyExtension" "HairPin" "Host" "Hostname" "IPForward"
