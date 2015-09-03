@@ -34,6 +34,7 @@
 
 ;;; Code:
 
+(require 'conf-mode)
 (require 'thingatpt)
 (require 'url-parse)
 
@@ -149,6 +150,7 @@ current unit file, defaulting to the link under point, if any."
 (defvar systemd-mode-syntax-table
   (let ((table (make-syntax-table)))
     (modify-syntax-entry ?\" "." table)
+    (modify-syntax-entry ?\; " " table)
     (modify-syntax-entry ?\n ">" table)
     (modify-syntax-entry ?\% "\\" table)
     table)
@@ -175,7 +177,7 @@ current unit file, defaulting to the link under point, if any."
 ;;;###autoload (add-to-list 'auto-mode-alist '("\\.override\\.conf.*\\'" . systemd-mode))
 
 ;;;###autoload
-(define-derived-mode systemd-mode fundamental-mode "Systemd"
+(define-derived-mode systemd-mode conf-mode "Systemd"
   "Major mode for editing systemd unit files. See
 http://www.freedesktop.org/wiki/Software/systemd/ for more
 information about systemd.  The hook `systemd-mode-hook' is run
@@ -183,8 +185,9 @@ at mode initialization.
 
 Key bindings:
 \\{systemd-mode-map}"
+  (set-keymap-parent systemd-mode-map nil)
   (systemd-company--setup systemd-use-company-p)
-  (setq-local comment-start systemd-comment-start)
+  (conf-mode-initialize systemd-comment-start)
   (setq-local font-lock-defaults '(systemd-font-lock-keywords)))
 
 (provide 'systemd)
