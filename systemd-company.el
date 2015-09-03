@@ -27,6 +27,10 @@
 (declare-function company-begin-backend "company")
 (declare-function company-grab-symbol "company")
 
+(defconst systemd-company-unit-sections
+  '("Unit" "Install" "Service")
+  "Configuration sections for systemd 224.")
+
 (defconst systemd-company-unit-directives
   ;; TODO: keep a script of sorts for generating this list.  systemd
   ;; source has a python script in tools/ for parsing the
@@ -107,6 +111,12 @@
     "Where" "WorkingDirectory")
   "Configuration directives for systemd 224.")
 
+(defconst systemd-company-network-sections
+  '("Match" "Link" "NetDev" "VLAN" "MACVLAN" "MACVTAP" "IPVLAN" "VXLAN"
+    "Tunnel" "Peer" "Tun" "Tap" "Bond" "Network" "Address" "Route" "DHCP"
+    "Bridge" "BridgeFDB")
+  "Network configuration sections for systemd 224.")
+
 (defconst systemd-company-network-directives
   ;; /Network directives/,/Journal fields/p
   '("ARPAllTargets" "ARPIPTargets" "ARPIntervalSec" "ARPProxy" "ARPValidate"
@@ -133,15 +143,19 @@
     "WakeOnLan")
   "Network configuration directives for systemd 224.")
 
-(defconst systemd-company-directives
-  (append systemd-company-unit-directives systemd-company-network-directives)
-  "Configuration directives for systemd.
-Combination of `systemd-company-unit-directives' and
-`systemd-company-network-directives'.")
-
 (defun systemd-company--setup (enable)
   (when (fboundp 'systemd-company--setup-company)
     (systemd-company--setup-company enable)))
+
+(defun systemd-company-section-p ()
+  "Return t if current line begins with \"[\", otherwise nil"
+  (save-excursion
+    (beginning-of-line)
+    (looking-at "\\[")))
+
+(defun systemd-company-network-p ()
+  "Return non-nil if `buffer-name' has a network-type extension, otherwise nil"
+  (string-match "\\.\\(link\\|netdev\\|network\\)\\'" (buffer-name)))
 
 (with-eval-after-load "company"
   (defun systemd-company-backend (command &optional arg &rest ignored)
@@ -151,8 +165,15 @@ Combination of `systemd-company-unit-directives' and
       (prefix (and (eq major-mode 'systemd-mode)
                    (company-grab-symbol)))
       (candidates
-       (cl-remove-if-not (lambda (c) (string-prefix-p arg c))
-                         systemd-company-directives))))
+       (cl-remove-if-not
+        (lambda (c) (string-prefix-p arg c))
+        (if (systemd-company-network-p)
+            (if (systemd-company-section-p)
+                systemd-company-network-sections
+              systemd-company-network-directives)
+          (if (systemd-company-section-p)
+              systemd-company-unit-sections
+            systemd-company-unit-directives))))))
   (defun systemd-company--setup-company (enable)
     (when enable
       (add-to-list (make-local-variable 'company-backends) 'systemd-company-backend))
