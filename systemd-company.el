@@ -29,7 +29,7 @@
 
 (defconst systemd-company-unit-sections
   '("Unit" "Install" "Service")
-  "Configuration sections for systemd 224.")
+  "Configuration sections for systemd 225.")
 
 (defconst systemd-company-unit-directives
   ;; TODO: keep a script of sorts for generating this list.  systemd
@@ -107,15 +107,15 @@
     "TCPCongestion" "TTYPath" "TTYReset" "TTYVHangup" "TTYVTDisallocate"
     "TimeoutIdleSec" "TimeoutSec" "TimeoutStartSec" "TimeoutStopSec"
     "TimerSlackNSec" "Transparent" "Type" "UMask" "Unit" "User"
-    "UtmpIdentifier" "WakeSystem" "WantedBy" "Wants" "WatchdogSec" "What"
-    "Where" "WorkingDirectory")
-  "Configuration directives for systemd 224.")
+    "UtmpIdentifier" "UtmpMode" "WakeSystem" "WantedBy" "Wants"
+    "WatchdogSec" "What" "Where" "WorkingDirectory")  
+  "Configuration directives for systemd 225.")
 
 (defconst systemd-company-network-sections
   '("Match" "Link" "NetDev" "VLAN" "MACVLAN" "MACVTAP" "IPVLAN" "VXLAN"
     "Tunnel" "Peer" "Tun" "Tap" "Bond" "Network" "Address" "Route" "DHCP"
     "Bridge" "BridgeFDB")
-  "Network configuration sections for systemd 224.")
+  "Network configuration sections for systemd 225.")
 
 (defconst systemd-company-network-directives
   ;; /Network directives/,/Journal fields/p
@@ -141,7 +141,7 @@
     "UseDNS" "UseDomains" "UseHostname" "UseMTU" "UseNTP" "UseRoutes" "VLAN"
     "VLANId" "VNetHeader" "VXLAN" "VendorClassIdentifier" "Virtualization"
     "WakeOnLan")
-  "Network configuration directives for systemd 224.")
+  "Network configuration directives for systemd 225.")
 
 (defun systemd-company--setup (enable)
   (when (fboundp 'systemd-company--setup-company)
