@@ -86,7 +86,10 @@
     ("=\\(1\\|yes\\|true\\|on\\|0\\|no\\|false\\|off\\)$"
      1 'font-lock-constant-face)
     ;; specifiers
-    ("%[nNpPiIfcrRtuUhsmbHv%]" 0 'font-lock-constant-face))
+    ("%[nNpPiIfcrRtuUhsmbHv%]" 0 'font-lock-constant-face)
+    ;; exec prefixes
+    ("=\\(-@\\|@-\\|[@-]\\)"
+     1 'font-lock-negation-char-face))
   "Default expressions to highlight in `systemd-mode'. See systemd.unit(5)
 for details on unit file syntax.")
 
