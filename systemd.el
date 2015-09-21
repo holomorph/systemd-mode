@@ -90,13 +90,13 @@
     ;; exec prefixes
     ("=\\(-@\\|@-\\|[@-]\\)"
      1 'font-lock-negation-char-face))
-  "Default expressions to highlight in `systemd-mode'. See systemd.unit(5)
-for details on unit file syntax.")
+  "Default expressions to highlight in `systemd-mode'.
+See systemd.unit(5) for details on unit file syntax.")
 
 (defun systemd-get-value (start)
-  "Joins lines in the key value starting at buffer position START,
-possibly broken by a backslash, and returns a string containing
-the value."
+  "Return the value of the key whose value begins at position START.
+Lines ending in a backslash are concatenated with the next
+according to systemd.unit(5)."
   (let ((break "\\\\\n")
         end)
     (save-excursion
@@ -107,8 +107,8 @@ the value."
       (replace-regexp-in-string break " " (buffer-substring start end)))))
 
 (defun systemd-doc-find ()
-  "Find the value of the unit's “Documentation” keys and return
-as a list of strings, otherwise nil."
+  "Find the value of the unit's “Documentation” keys.
+Return values in a list of strings, otherwise nil."
   (let ((key "^Documentation=")
         string)
     (save-excursion
@@ -119,15 +119,16 @@ as a list of strings, otherwise nil."
       (remove "\\" (split-string string)))))
 
 (defun systemd-doc-man (page)
-  "Open a manual page with `systemd-man-function'."
+  "Open a manual page PAGE with `systemd-man-function'."
   (pcase (symbol-name systemd-man-function)
     ("woman" (woman (replace-regexp-in-string "([[:alnum:]]+)" "" page)))
     ("man" (man page))
     (_ (apply 'systemd-man-function page))))
 
 (defun systemd-doc-open (url)
-  "Open URL.  Interactively completes the documentation in the
-current unit file, defaulting to the link under point, if any."
+  "Prompt to open URL.
+Interactively completes the documentation in the current unit
+file, defaulting to the link under point, if any."
   (interactive
    (let* ((completion-cycle-threshold t)
           (collection (systemd-doc-find))
@@ -146,7 +147,7 @@ current unit file, defaulting to the link under point, if any."
       (_ (user-error "Invalid link")))))
 
 (defun systemd-doc-directives ()
-  "Open systemd.directives(7)"
+  "Open systemd.directives(7)."
   (interactive)
   (systemd-doc-man "systemd.directives(7)"))
 

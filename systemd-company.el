@@ -148,13 +148,13 @@
     (systemd-company--setup-company enable)))
 
 (defun systemd-company-section-p ()
-  "Return t if current line begins with \"[\", otherwise nil"
+  "Return t if current line begins with \"[\", otherwise nil."
   (save-excursion
     (beginning-of-line)
     (looking-at "\\[")))
 
 (defun systemd-company-network-p ()
-  "Return non-nil if `buffer-name' has a network-type extension, otherwise nil"
+  "Return non-nil if `buffer-name' has a network-type extension, otherwise nil."
   (string-match "\\.\\(link\\|netdev\\|network\\)\\'" (buffer-name)))
 
 (with-eval-after-load "company"
