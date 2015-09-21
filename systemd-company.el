@@ -108,8 +108,8 @@
     "TimeoutIdleSec" "TimeoutSec" "TimeoutStartSec" "TimeoutStopSec"
     "TimerSlackNSec" "Transparent" "Type" "UMask" "Unit" "User"
     "UtmpIdentifier" "UtmpMode" "WakeSystem" "WantedBy" "Wants"
-    "WatchdogSec" "What" "Where" "WorkingDirectory")  
-  "Configuration directives for systemd 225.")
+    "WatchdogSec" "What" "Where" "WorkingDirectory")
+  "Configuration directives for systemd 226.")
 
 (defconst systemd-company-network-sections
   '("Match" "Link" "NetDev" "VLAN" "MACVLAN" "MACVTAP" "IPVLAN" "VXLAN"
@@ -123,8 +123,9 @@
     "AdSelect" "Address" "AllSlavesActive" "AllowPortToBeRoot"
     "Architecture" "BindCarrier" "BitsPerSecond" "Bond" "Bridge"
     "ClientIdentifier" "CopyDSCP" "Cost" "CriticalConnection" "DHCP"
-    "DHCPServer" "DNS" "Description" "Destination" "DiscoverPathMTU" "Domains"
-    "DownDelaySec" "Driver" "Duplex" "FDBAgeingSec" "FailOverMACPolicy"
+    "DHCPServer" "DNS" "DefaultLeaseTimeSec" "Description" "Destination" "DiscoverPathMTU"
+    "Domains" "DownDelaySec" "Driver" "Duplex" "EmitDNS" "EmitNTP"
+    "EmitTimezone" "EncapsulationLimit" "FDBAgeingSec" "FailOverMACPolicy"
     "FallbackDNS" "FallbackNTP" "FastLeave" "Gateway" "GratuitousARP"
     "GroupPolicyExtension" "HairPin" "Host" "Hostname" "IPForward"
     "IPMasquerade" "IPv4LLRoute" "IPv6FlowLabel" "IPv6PrivacyExtensions"
@@ -132,16 +133,17 @@
     "L3MissNotification" "LACPTransmitRate" "LLDP" "LLMNR" "Label"
     "LearnPacketIntervalSec" "LinkLocalAddressing" "Local" "MACAddress"
     "MACAddressPolicy" "MACVLAN" "MIIMonitorSec" "MTUBytes" "MacLearning"
-    "Metric" "MinLinks" "Mode" "MultiQueue" "NTP" "Name" "NamePolicy"
-    "OneQueue" "OriginalName" "PacketInfo" "PacketsPerSlave" "Path" "Peer"
-    "PrimaryReselectPolicy" "Remote" "RequestBroadcast" "ResendIGMP"
-    "RouteMetric" "RouteShortCircuit" "Scope" "SendHostname" "Source" "TOS"
-    "TTL" "TransmitHashPolicy" "Tunnel" "UDP6ZeroCheckSumRx"
-    "UDP6ZeroChecksumTx" "UDPCheckSum" "UnicastFlood" "UpDelaySec" "UseBPDU"
-    "UseDNS" "UseDomains" "UseHostname" "UseMTU" "UseNTP" "UseRoutes" "VLAN"
-    "VLANId" "VNetHeader" "VXLAN" "VendorClassIdentifier" "Virtualization"
-    "WakeOnLan")
-  "Network configuration directives for systemd 225.")
+    "MaxLeaseTimeSec" "Metric" "MinLinks" "Mode" "MultiQueue" "NTP" "Name"
+    "NamePolicy" "OneQueue" "OriginalName" "PacketInfo" "PacketsPerSlave"
+    "Path" "Peer" "PoolOffset" "PoolSize" "PrimaryReselectPolicy" "Remote"
+    "RequestBroadcast" "ResendIGMP" "RouteMetric" "RouteShortCircuit"
+    "Scope" "SendHostname" "Source" "TOS" "TTL" "Timezone"
+    "TransmitHashPolicy" "Tunnel" "UDP6ZeroCheckSumRx" "UDP6ZeroChecksumTx"
+    "UDPCheckSum" "UnicastFlood" "UpDelaySec" "UseBPDU" "UseDNS"
+    "UseDomains" "UseHostname" "UseMTU" "UseNTP" "UseRoutes" "UseTimezone"
+    "VLAN" "VLANId" "VNetHeader" "VXLAN" "VendorClassIdentifier"
+    "Virtualization" "WakeOnLan")
+  "Network configuration directives for systemd 226.")
 
 (defun systemd-company--setup (enable)
   (when (fboundp 'systemd-company--setup-company)
