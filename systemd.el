@@ -30,7 +30,8 @@
 ;; C-c C-o to open links to documentation in a unit (cf. systemctl
 ;; help).
 
-;; Supports completion of unit directives via `company-mode'.
+;; Supports completion via `company-mode' of directives and sections
+;; in either units or network configuration.
 
 ;;; Code:
 
