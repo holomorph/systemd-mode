@@ -167,6 +167,14 @@ file, defaulting to the link under point, if any."
     map)
   "Keymap used in `systemd-mode' buffers.")
 
+(easy-menu-define systemd-mode-menu systemd-mode-map
+  "Menu used in `systemd-mode' buffers."
+  '("Systemd"
+    ["Open Unit File help" systemd-doc-open
+     :help "Documentation referenced in current buffer"]
+    ["Open systemd.directives(7)" systemd-doc-directives
+     :help "Index of configuration directives"]))
+
 ;;;###autoload (add-to-list 'auto-mode-alist '("\\.automount\\'" . systemd-mode))
 ;;;###autoload (add-to-list 'auto-mode-alist '("\\.busname\\'" . systemd-mode))
 ;;;###autoload (add-to-list 'auto-mode-alist '("\\.mount\\'" . systemd-mode))
