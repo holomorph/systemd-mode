@@ -192,10 +192,12 @@ file, defaulting to the link under point, if any."
 
 ;;;###autoload
 (define-derived-mode systemd-mode conf-mode "Systemd"
-  "Major mode for editing systemd unit files. See
-http://www.freedesktop.org/wiki/Software/systemd/ for more
-information about systemd.  The hook `systemd-mode-hook' is run
-at mode initialization.
+  "Major mode for editing systemd unit files.
+See http://www.freedesktop.org/wiki/Software/systemd/ for more
+information about systemd.
+
+In addition to any hooks its parent mode might have run, this
+mode runs the hook `systemd-mode-hook' at mode initialization.
 
 Key bindings:
 \\{systemd-mode-map}"
