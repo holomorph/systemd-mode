@@ -3,7 +3,7 @@
 ;; Copyright (C) 2014-2015  Mark Oteiza <mvoteiza@udel.edu>
 
 ;; Author: Mark Oteiza <mvoteiza@udel.edu>
-;; Version: 1.3
+;; Version: 1.3.1
 ;; Package-Requires: ((emacs "24.4"))
 ;; Keywords: tools, unix
 
@@ -24,11 +24,10 @@
 
 ;; Major mode for editing systemd units.
 
-;; Reflects a stripped down conf-mode, except with strict regex for
-;; whitespace, and highlighting for special syntax, such as specifiers
-;; and booleans.  Features a facility for browsing documentation: use
-;; C-c C-o to open links to documentation in a unit (cf. systemctl
-;; help).
+;; Similar to `conf-mode' but with added highlighting; e.g. for
+;; specifiers and booleans.  Employs strict regex for whitespace.
+;; Features a facility for browsing documentation: use C-c C-o to open
+;; links to documentation in a unit (cf. systemctl help).
 
 ;; Supports completion via `company-mode' of directives and sections
 ;; in either units or network configuration.
