@@ -30,7 +30,9 @@
 ;; links to documentation in a unit (cf. systemctl help).
 
 ;; Supports completion via `company-mode' of directives and sections
-;; in either units or network configuration.
+;; in either units or network configuration.  Use the tunable
+;; `systemd-use-company-p' to control enabling of company.
+;; Alternatively, add company to `systemd-mode-hook'.
 
 ;;; Code:
 
@@ -66,7 +68,7 @@
                 (function :tag "Other function"))
   :group 'systemd)
 
-(defcustom systemd-use-company-p t
+(defcustom systemd-use-company-p nil
   "Whether to use `company-mode' for completion, if available."
   :type 'boolean
   :group 'systemd)
