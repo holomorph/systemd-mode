@@ -21,7 +21,7 @@
 
 ;;; Code:
 
-(require 'cl-lib)
+(eval-when-compile (require 'cl-lib))
 
 (declare-function company-mode "company")
 (declare-function company-begin-backend "company")
@@ -171,15 +171,15 @@
       (prefix (and (eq major-mode 'systemd-mode)
                    (company-grab-symbol)))
       (candidates
-       (cl-remove-if-not
-        (lambda (c) (string-prefix-p arg c))
-        (if (systemd-company-network-p)
-            (if (systemd-company-section-p)
-                systemd-company-network-sections
-              systemd-company-network-directives)
-          (if (systemd-company-section-p)
-              systemd-company-unit-sections
-            systemd-company-unit-directives))))))
+       (cl-loop
+        for comp in (if (systemd-company-network-p)
+                        (if (systemd-company-section-p)
+                            systemd-company-network-sections
+                          systemd-company-network-directives)
+                      (if (systemd-company-section-p)
+                          systemd-company-unit-sections
+                        systemd-company-unit-directives))
+        if (string-prefix-p arg comp) collect comp))))
   (defun systemd-company--setup-company (enable)
     (when enable
       (add-to-list (make-local-variable 'company-backends) 'systemd-company-backend))
