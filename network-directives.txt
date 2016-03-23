@@ -19,14 +19,19 @@ CriticalConnection
 DHCP
 DHCPServer
 DNS
+DNSSEC
+DNSSECNegativeTrustAnchors
 DefaultLeaseTimeSec
+Description
 Destination
+DestinationPort
 DiscoverPathMTU
 Domains
 DownDelaySec
 Driver
 Duplex
 EmitDNS
+EmitLLDP
 EmitNTP
 EmitTimezone
 EncapsulationLimit
@@ -77,6 +82,7 @@ Metric
 MinLinks
 Mode
 MultiQueue
+MulticastDNS
 NTP
 Name
 NamePolicy
@@ -88,6 +94,7 @@ Path
 Peer
 PoolOffset
 PoolSize
+PortRange
 PreferredSource
 PrimaryReselectPolicy
 Remote

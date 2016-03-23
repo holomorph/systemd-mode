@@ -4,6 +4,7 @@ After
 Alias
 AllowIsolate
 Also
+AmbientCapabilities
 AppArmorProfile
 AssertACPower
 AssertArchitecture
@@ -35,7 +36,6 @@ BlockIOWeight
 BlockIOWriteBandwidth
 Broadcast
 BusName
-BusPolicy
 CPUAccounting
 CPUAffinity
 CPUQuota
@@ -43,7 +43,6 @@ CPUSchedulingPolicy
 CPUSchedulingPriority
 CPUSchedulingResetOnFork
 CPUShares
-Capabilities
 CapabilityBoundingSet
 ConditionACPower
 ConditionArchitecture
@@ -138,7 +137,6 @@ MemoryLimit
 MessageQueueMaxMessages
 MessageQueueMessageSize
 MountFlags
-NetClass
 Nice
 NoDelay
 NoNewPrivileges
@@ -175,7 +173,7 @@ PrivateTmp
 PropagatesReloadTo
 ProtectHome
 ProtectSystem
-RandomSec
+RandomizedDelaySec
 ReadOnlyDirectories
 ReadWriteDirectories
 RebootArgument
@@ -200,6 +198,7 @@ RootDirectory
 RootDirectoryStartOnly
 RuntimeDirectory
 RuntimeDirectoryMode
+RuntimeMaxSec
 SELinuxContext
 SELinuxContextFromNet
 SecureBits
