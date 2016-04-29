@@ -73,6 +73,22 @@
   :type 'boolean
   :group 'systemd)
 
+(defconst systemd-autoload-regexp
+  (eval-when-compile
+    (rx "."
+        (or "automount" "busname" "mount" "service" "slice"
+            "socket" "swap" "target" "timer" "link" "netdev" "network")
+        string-end))
+  "Regexp for file buffers in which to autoload `systemd-mode'.")
+
+(defconst systemd-tempfn-autoload-regexp
+  (eval-when-compile
+    (rx (or "automount" "busname" "mount" "service" "slice"
+            "socket" "swap" "target" "timer" "link" "netdev" "network"
+            "override.conf")
+        (?? (= 16 (char hex-digit))) string-end))
+  "Regexp for temp file buffers in which to autoload `systemd-mode'.")
+
 (defvar systemd-font-lock-keywords
   `(("^\\([#;]\\)\\(.*\\)$"
      (1 'font-lock-comment-delimiter-face)
@@ -178,18 +194,10 @@ file, defaulting to the link under point, if any."
     ["Open systemd.directives(7)" systemd-doc-directives
      :help "Index of configuration directives"]))
 
-;;;###autoload (add-to-list 'auto-mode-alist '("\\.automount\\'" . systemd-mode))
-;;;###autoload (add-to-list 'auto-mode-alist '("\\.busname\\'" . systemd-mode))
-;;;###autoload (add-to-list 'auto-mode-alist '("\\.mount\\'" . systemd-mode))
-;;;###autoload (add-to-list 'auto-mode-alist '("\\.service\\'" . systemd-mode))
-;;;###autoload (add-to-list 'auto-mode-alist '("\\.slice\\'" . systemd-mode))
-;;;###autoload (add-to-list 'auto-mode-alist '("\\.socket\\'" . systemd-mode))
-;;;###autoload (add-to-list 'auto-mode-alist '("\\.target\\'" . systemd-mode))
-;;;###autoload (add-to-list 'auto-mode-alist '("\\.timer\\'" . systemd-mode))
-;;;###autoload (add-to-list 'auto-mode-alist '("\\.link\\'" . systemd-mode))
-;;;###autoload (add-to-list 'auto-mode-alist '("\\.netdev\\'" . systemd-mode))
-;;;###autoload (add-to-list 'auto-mode-alist '("\\.network\\'" . systemd-mode))
-;;;###autoload (add-to-list 'auto-mode-alist '("\\.override\\.conf.*\\'" . systemd-mode))
+;;;###autoload
+(add-to-list 'auto-mode-alist `(,systemd-autoload-regexp . systemd-mode))
+;;;###autoload
+(add-to-list 'auto-mode-alist `(,systemd-tempfn-autoload-regexp . systemd-mode))
 
 ;;;###autoload
 (define-derived-mode systemd-mode conf-mode "Systemd"
