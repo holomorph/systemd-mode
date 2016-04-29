@@ -89,28 +89,6 @@
         (?? (= 16 (char hex-digit))) string-end))
   "Regexp for temp file buffers in which to autoload `systemd-mode'.")
 
-(defvar systemd-font-lock-keywords
-  `(("^\\([#;]\\)\\(.*\\)$"
-     (1 'font-lock-comment-delimiter-face)
-     (2 'font-lock-comment-face))
-    ("\\\\$" 0 'font-lock-warning-face) ; line break
-    ;; sections
-    ("^\\(\\[[[:upper:]][[:alnum:]]+\\]\\)"
-     1 'font-lock-type-face)
-    ;; keys
-    ("^\\([[:upper:]][[:alnum:]]+\\)="
-     1 'font-lock-keyword-face)
-    ;; boolean arguments
-    ("=\\(1\\|yes\\|true\\|on\\|0\\|no\\|false\\|off\\)$"
-     1 'font-lock-constant-face)
-    ;; specifiers
-    ("%[nNpPiIfcrRtuUhsmbHv%]" 0 'font-lock-constant-face)
-    ;; exec prefixes
-    ("=\\(-@\\|@-\\|[@-]\\)"
-     1 'font-lock-negation-char-face))
-  "Default expressions to highlight in `systemd-mode'.
-See systemd.unit(5) for details on unit file syntax.")
-
 (defun systemd-get-value (start)
   "Return the value of the key whose value begins at position START.
 Lines ending in a backslash are concatenated with the next
@@ -168,6 +146,28 @@ file, defaulting to the link under point, if any."
   "Open systemd.directives(7)."
   (interactive)
   (systemd-doc-man "systemd.directives(7)"))
+
+(defvar systemd-font-lock-keywords
+  `(("^\\([#;]\\)\\(.*\\)$"
+     (1 'font-lock-comment-delimiter-face)
+     (2 'font-lock-comment-face))
+    ("\\\\$" 0 'font-lock-warning-face) ; line break
+    ;; sections
+    ("^\\(\\[[[:upper:]][[:alnum:]]+\\]\\)"
+     1 'font-lock-type-face)
+    ;; keys
+    ("^\\([[:upper:]][[:alnum:]]+\\)="
+     1 'font-lock-keyword-face)
+    ;; boolean arguments
+    ("=\\(1\\|yes\\|true\\|on\\|0\\|no\\|false\\|off\\)$"
+     1 'font-lock-constant-face)
+    ;; specifiers
+    ("%[nNpPiIfcrRtuUhsmbHv%]" 0 'font-lock-constant-face)
+    ;; exec prefixes
+    ("=\\(-@\\|@-\\|[@-]\\)"
+     1 'font-lock-negation-char-face))
+  "Default expressions to highlight in `systemd-mode'.
+See systemd.unit(5) for details on unit file syntax.")
 
 (defvar systemd-mode-syntax-table
   (let ((table (make-syntax-table)))
