@@ -29,10 +29,11 @@
 ;; Features a facility for browsing documentation: use C-c C-o to open
 ;; links to documentation in a unit (cf. systemctl help).
 
-;; Supports completion via `company-mode' of directives and sections
-;; in either units or network configuration.  Use the tunable
-;; `systemd-use-company-p' to control enabling of company.
-;; Alternatively, add company to `systemd-mode-hook'.
+;; Supports completion of directives and sections in either units or
+;; network configuration.  Both a completer for
+;; `completion-at-point-functions' and a company backend are provided.
+;; The latter can be enabled by adding `company-mode' to
+;; `systemd-mode-hook'.
 
 ;;; Code:
 
@@ -40,7 +41,8 @@
 (require 'thingatpt)
 (require 'url-parse)
 
-(require 'systemd-company)
+(declare-function company-begin-backend "company")
+(declare-function company-grab-symbol "company")
 
 (defgroup systemd ()
   "Major mode for editing systemd units."
@@ -72,6 +74,128 @@
   "Whether to use `company-mode' for completion, if available."
   :type 'boolean
   :group 'systemd)
+
+(defconst systemd-unit-sections
+  '("Unit" "Install" "Service")
+  "Configuration sections for systemd 225.")
+
+(defconst systemd-unit-directives
+  ;; TODO: keep a script of sorts for generating this list.  systemd
+  ;; source has a python script in tools/ for parsing the
+  ;; documentation xml for the unit directives.
+  ;;
+  ;; forcer on freenode threw together a curl monstrosity for achieving
+  ;; the same:
+  ;; curl -s http://www.freedesktop.org/software/systemd/man/systemd.directives.html | tr -d '\n' | sed 's/>/>\n/g' | sed -ne '/Unit directives/,/Options on the kernel/p' | sed -ne 's/.*<dt id="\([^-][^"]*\)=">.*/\1/p'
+  ;; Quote, wrap with fill-column at 72, insert into list and indent
+  '("Accept" "AccuracySec" "After" "Alias" "AllowIsolate" "Also"
+    "AppArmorProfile" "AssertACPower" "AssertArchitecture"
+    "AssertCapability" "AssertDirectoryNotEmpty" "AssertFileIsExecutable"
+    "AssertFileNotEmpty" "AssertFirstBoot" "AssertHost"
+    "AssertKernelCommandLine" "AssertNeedsUpdate" "AssertPathExists"
+    "AssertPathExistsGlob" "AssertPathIsDirectory" "AssertPathIsMountPoint"
+    "AssertPathIsReadWrite" "AssertPathIsSymbolicLink" "AssertSecurity"
+    "AssertVirtualization" "Backlog" "Before" "BindIPv6Only" "BindToDevice"
+    "BindsTo" "BlockIOAccounting" "BlockIODeviceWeight"
+    "BlockIOReadBandwidth" "BlockIOWeight" "BlockIOWriteBandwidth"
+    "Broadcast" "BusName" "BusPolicy" "CPUAccounting" "CPUAffinity"
+    "CPUQuota" "CPUSchedulingPolicy" "CPUSchedulingPriority"
+    "CPUSchedulingResetOnFork" "CPUShares" "Capabilities"
+    "CapabilityBoundingSet" "ConditionACPower" "ConditionArchitecture"
+    "ConditionCapability" "ConditionDirectoryNotEmpty"
+    "ConditionFileIsExecutable" "ConditionFileNotEmpty" "ConditionFirstBoot"
+    "ConditionHost" "ConditionKernelCommandLine" "ConditionNeedsUpdate"
+    "ConditionPathExists" "ConditionPathExistsGlob"
+    "ConditionPathIsDirectory" "ConditionPathIsMountPoint"
+    "ConditionPathIsReadWrite" "ConditionPathIsSymbolicLink"
+    "ConditionSecurity" "ConditionVirtualization" "Conflicts"
+    "DefaultDependencies" "DefaultInstance" "DeferAcceptSec" "Delegate"
+    "Description" "DeviceAllow" "DevicePolicy" "DirectoryMode"
+    "DirectoryNotEmpty" "Documentation" "Environment" "EnvironmentFile"
+    "ExecReload" "ExecStart" "ExecStartPost" "ExecStartPre" "ExecStop"
+    "ExecStopPost" "ExecStopPre" "FailureAction" "FileDescriptorName"
+    "FileDescriptorStoreMax" "FreeBind" "Group" "GuessMainPID"
+    "IOSchedulingClass" "IOSchedulingPriority" "IPTOS" "IPTTL"
+    "IgnoreOnIsolate" "IgnoreSIGPIPE" "InaccessibleDirectories"
+    "JobTimeoutAction" "JobTimeoutRebootArgument" "JobTimeoutSec"
+    "JoinsNamespaceOf" "KeepAlive" "KeepAliveIntervalSec" "KeepAliveProbes"
+    "KeepAliveTimeSec" "KillMode" "KillSignal" "LimitAS" "LimitCORE"
+    "LimitCPU" "LimitDATA" "LimitFSIZE" "LimitLOCKS" "LimitMEMLOCK"
+    "LimitMSGQUEUE" "LimitNICE" "LimitNOFILE" "LimitNPROC" "LimitRSS"
+    "LimitRTPRIO" "LimitRTTIME" "LimitSIGPENDING" "LimitSTACK"
+    "ListenDatagram" "ListenFIFO" "ListenMessageQueue" "ListenNetlink"
+    "ListenSequentialPacket" "ListenSpecial" "ListenStream"
+    "ListenUSBFunction" "MakeDirectory" "Mark" "MaxConnections"
+    "MemoryAccounting" "MemoryLimit" "MessageQueueMaxMessages"
+    "MessageQueueMessageSize" "MountFlags" "NetClass" "Nice" "NoDelay"
+    "NoNewPrivileges" "NonBlocking" "NotifyAccess" "OOMScoreAdjust"
+    "OnActiveSec" "OnBootSec" "OnCalendar" "OnFailure" "OnFailureJobMode"
+    "OnStartupSec" "OnUnitActiveSec" "OnUnitInactiveSec" "Options" "PAMName"
+    "PIDFile" "PartOf" "PassCredentials" "PassEnvironment" "PassSecurity"
+    "PathChanged" "PathExists" "PathExistsGlob" "PathModified"
+    "PermissionsStartOnly" "Persistent" "Personality" "PipeSize" "Priority"
+    "PrivateDevices" "PrivateNetwork" "PrivateTmp" "PropagatesReloadTo"
+    "ProtectHome" "ProtectSystem" "RandomSec" "ReadOnlyDirectories"
+    "ReadWriteDirectories" "RebootArgument" "ReceiveBuffer"
+    "RefuseManualStart" "RefuseManualStop" "ReloadPropagatedFrom"
+    "RemainAfterElapse" "RemainAfterExit" "RemoveOnStop" "RequiredBy"
+    "Requires" "RequiresMountsFor" "Requisite" "Restart"
+    "RestartForceExitStatus" "RestartPreventExitStatus" "RestartSec"
+    "RestrictAddressFamilies" "ReusePort" "RootDirectory"
+    "RootDirectoryStartOnly" "RuntimeDirectory" "RuntimeDirectoryMode"
+    "SELinuxContext" "SELinuxContextFromNet" "SecureBits" "SendBuffer"
+    "SendSIGHUP" "SendSIGKILL" "Service" "Slice" "SloppyOptions"
+    "SmackLabel" "SmackLabelIPIn" "SmackLabelIPOut" "SmackProcessLabel"
+    "SocketGroup" "SocketMode" "SocketProtocol" "SocketUser" "Sockets"
+    "SourcePath" "StandardError" "StandardInput" "StandardOutput"
+    "StartLimitAction" "StartLimitBurst" "StartLimitInterval"
+    "StartupBlockIOWeight" "StartupCPUShares" "StopWhenUnneeded"
+    "SuccessExitStatus" "SupplementaryGroups" "Symlinks" "SyslogFacility"
+    "SyslogIdentifier" "SyslogLevel" "SyslogLevelPrefix"
+    "SystemCallArchitectures" "SystemCallErrorNumber" "SystemCallFilter"
+    "TCPCongestion" "TTYPath" "TTYReset" "TTYVHangup" "TTYVTDisallocate"
+    "TasksAccounting" "TasksMax" "TimeoutIdleSec" "TimeoutSec"
+    "TimeoutStartSec" "TimeoutStopSec" "TimerSlackNSec" "Transparent" "Type"
+    "UMask" "USBFunctionDescriptors" "USBFunctionStrings" "Unit" "User"
+    "UtmpIdentifier" "UtmpMode" "WakeSystem" "WantedBy" "Wants"
+    "WatchdogSec" "What" "Where" "WorkingDirectory" "Writable")
+  "Configuration directives for systemd 228.")
+
+(defconst systemd-network-sections
+  '("Match" "Link" "NetDev" "VLAN" "MACVLAN" "MACVTAP" "IPVLAN" "VXLAN"
+    "Tunnel" "Peer" "Tun" "Tap" "Bond" "Network" "Address" "Route" "DHCP"
+    "Bridge" "BridgeFDB")
+  "Network configuration sections for systemd 225.")
+
+(defconst systemd-network-directives
+  ;; /Network directives/,/Journal fields/p
+  '("ARPAllTargets" "ARPIPTargets" "ARPIntervalSec" "ARPProxy" "ARPValidate"
+    "AdSelect" "Address" "AllSlavesActive" "AllowPortToBeRoot"
+    "Architecture" "BindCarrier" "BitsPerSecond" "Bond" "Bridge"
+    "ClientIdentifier" "CopyDSCP" "Cost" "CriticalConnection" "DHCP"
+    "DHCPServer" "DNS" "DefaultLeaseTimeSec" "Description" "Destination" "DiscoverPathMTU"
+    "Domains" "DownDelaySec" "Driver" "Duplex" "EmitDNS" "EmitNTP"
+    "EmitTimezone" "EncapsulationLimit" "FDBAgeingSec" "FailOverMACPolicy"
+    "FallbackDNS" "FallbackNTP" "FastLeave" "ForwardDelaySec" "Gateway"
+    "GratuitousARP" "GroupPolicyExtension" "HairPin" "HelloTimeSec" "Host"
+    "Hostname" "IPForward" "IPMasquerade" "IPv4LLRoute"
+    "IPv6AcceptRouterAdvertisements" "IPv6DuplicateAddressDetection"
+    "IPv6FlowLabel" "IPv6HopLimit" "IPv6PrivacyExtensions" "IPv6Token" "Id"
+    "KernelCommandLine" "Kind" "L2MissNotification" "L3MissNotification"
+    "LACPTransmitRate" "LLDP" "LLMNR" "Label" "LearnPacketIntervalSec"
+    "LinkLocalAddressing" "Local" "MACAddress" "MACAddressPolicy" "MACVLAN"
+    "MIIMonitorSec" "MTUBytes" "MacLearning" "MaxAgeSec" "MaxLeaseTimeSec"
+    "MaximumFDBEntries" "Metric" "MinLinks" "Mode" "MultiQueue" "NTP" "Name"
+    "NamePolicy" "OneQueue" "OriginalName" "PacketInfo" "PacketsPerSlave"
+    "Path" "Peer" "PoolOffset" "PoolSize" "PreferredSource"
+    "PrimaryReselectPolicy" "Remote" "RequestBroadcast" "ResendIGMP"
+    "RouteMetric" "RouteShortCircuit" "Scope" "SendHostname" "Source" "TOS"
+    "TTL" "Timezone" "TransmitHashPolicy" "Tunnel" "UDP6ZeroCheckSumRx"
+    "UDP6ZeroChecksumTx" "UDPCheckSum" "UnicastFlood" "UpDelaySec" "UseBPDU"
+    "UseDNS" "UseDomains" "UseHostname" "UseMTU" "UseNTP" "UseRoutes"
+    "UseTimezone" "VLAN" "VLANId" "VNetHeader" "VXLAN"
+    "VendorClassIdentifier" "Virtualization" "WakeOnLan")
+  "Network configuration directives for systemd 228.")
 
 (defconst systemd-autoload-regexp
   (eval-when-compile
@@ -147,6 +271,41 @@ file, defaulting to the link under point, if any."
   (interactive)
   (systemd-doc-man "systemd.directives(7)"))
 
+(defun systemd-buffer-section-p ()
+  "Return t if current line begins with \"[\", otherwise nil."
+  (save-excursion
+    (beginning-of-line)
+    (looking-at "\\[")))
+
+(defun systemd-buffer-network-p ()
+  "Return non-nil if `buffer-name' has a network-type extension, otherwise nil."
+  (string-match-p (eval-when-compile
+                    (rx "." (or "link" "netdev" "network") string-end))
+                  (buffer-name)))
+
+(defun systemd-completion-table (&rest _ignore)
+  "Return a list of completion candidates."
+  (let ((sectionp (systemd-buffer-section-p)))
+    (if (systemd-buffer-network-p)
+        (if sectionp systemd-network-sections systemd-network-directives)
+      (if sectionp systemd-unit-sections systemd-unit-directives))))
+
+(defun systemd-complete-at-point ()
+  "Complete the symbol at point."
+  (let ((bounds (bounds-of-thing-at-point 'symbol)))
+    (list (or (car bounds) (point))
+          (or (cdr bounds) (point))
+          (completion-table-dynamic #'systemd-completion-table))))
+
+(defun systemd-company-backend (command &optional arg &rest ignored)
+  "Backend for `company-mode' in `systemd-mode' buffers."
+  (interactive (list 'interactive))
+  (pcase command
+    (`interactive (company-begin-backend 'systemd-company-backend))
+    (`prefix (and (eq major-mode 'systemd-mode) (company-grab-symbol)))
+    (`candidates (all-completions arg (systemd-completion-table nil)))
+    (`post-completion (if (not (systemd-buffer-section-p)) (insert "=")))))
+
 (defvar systemd-font-lock-keywords
   `(("^\\([#;]\\)\\(.*\\)$"
      (1 'font-lock-comment-delimiter-face)
@@ -211,8 +370,11 @@ mode runs the hook `systemd-mode-hook' at mode initialization.
 Key bindings:
 \\{systemd-mode-map}"
   (set-keymap-parent systemd-mode-map nil)
-  (systemd-company--setup systemd-use-company-p)
   (conf-mode-initialize systemd-comment-start)
+  (if (and systemd-use-company-p (fboundp 'company-mode))
+      (company-mode 1))
+  (add-hook 'company-backends #'systemd-company-backend)
+  (add-hook 'completion-at-point-functions #'systemd-complete-at-point)
   (setq-local font-lock-defaults '(systemd-font-lock-keywords)))
 
 (provide 'systemd)
