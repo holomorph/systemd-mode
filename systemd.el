@@ -320,7 +320,7 @@ file, defaulting to the link under point, if any."
      (2 'font-lock-comment-face))
     ("\\\\$" 0 'font-lock-warning-face) ; line break
     ;; sections
-    ("^\\(\\[[[:upper:]][[:alnum:]]+\\]\\)"
+    ("^\\(\\[\\(?:X-\\)?[[:upper:]][[:alnum:]]+\\]\\)"
      1 'font-lock-type-face)
     ;; keys
     ("^\\([[:upper:]][[:alnum:]]+\\)="
