@@ -199,7 +199,7 @@
 
 (defconst systemd-autoload-regexp
   (eval-when-compile
-    (rx "."
+    (rx (+? (or alphanumeric (any "-_.@\\"))) "."
         (or "automount" "busname" "mount" "service" "slice"
             "socket" "swap" "target" "timer" "link" "netdev" "network")
         string-end))
@@ -207,11 +207,19 @@
 
 (defconst systemd-tempfn-autoload-regexp
   (eval-when-compile
-    (rx (or "automount" "busname" "mount" "service" "slice"
-            "socket" "swap" "target" "timer" "link" "netdev" "network"
+    (rx ".#" 
+        (or (and (+? (or alphanumeric (any "-_.@\\"))) "."
+                 (or "automount" "busname" "mount" "service" "slice"
+                     "socket" "swap" "target" "timer" "link" "netdev" "network"))
             "override.conf")
-        (?? (= 16 (char hex-digit))) string-end))
+        (= 16 (char hex-digit)) string-end))
   "Regexp for temp file buffers in which to autoload `systemd-mode'.")
+
+(defconst systemd-dropin-autoload-regexp
+  (eval-when-compile
+    (rx "/systemd/" (+? anything) ".d/"
+        (+? (or alphanumeric (any "-_.@\\"))) ".conf" string-end))
+  "Regexp for dropin config file buffers in which to autoload `systemd-mode'.")
 
 (defun systemd-get-value (start)
   "Return the value of the key whose value begins at position START.
@@ -357,6 +365,8 @@ See systemd.unit(5) for details on unit file syntax.")
 (add-to-list 'auto-mode-alist `(,systemd-autoload-regexp . systemd-mode))
 ;;;###autoload
 (add-to-list 'auto-mode-alist `(,systemd-tempfn-autoload-regexp . systemd-mode))
+;;;###autoload
+(add-to-list 'auto-mode-alist `(,systemd-dropin-autoload-regexp . systemd-mode))
 
 ;;;###autoload
 (define-derived-mode systemd-mode conf-mode "Systemd"
