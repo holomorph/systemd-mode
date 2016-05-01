@@ -199,7 +199,7 @@
 
 (defconst systemd-autoload-regexp
   (eval-when-compile
-    (rx (+? (or alphanumeric (any "-_.@\\"))) "."
+    (rx (+? (any "a-zA-Z0-9-_.@\\")) "."
         (or "automount" "busname" "mount" "service" "slice"
             "socket" "swap" "target" "timer" "link" "netdev" "network")
         string-end))
@@ -208,7 +208,7 @@
 (defconst systemd-tempfn-autoload-regexp
   (eval-when-compile
     (rx ".#" 
-        (or (and (+? (or alphanumeric (any "-_.@\\"))) "."
+        (or (and (+? (any "a-zA-Z0-9-_.@\\")) "."
                  (or "automount" "busname" "mount" "service" "slice"
                      "socket" "swap" "target" "timer" "link" "netdev" "network"))
             "override.conf")
@@ -218,7 +218,7 @@
 (defconst systemd-dropin-autoload-regexp
   (eval-when-compile
     (rx "/systemd/" (+? anything) ".d/"
-        (+? (or alphanumeric (any "-_.@\\"))) ".conf" string-end))
+        (+? (any "a-zA-Z0-9-_.@\\")) ".conf" string-end))
   "Regexp for dropin config file buffers in which to autoload `systemd-mode'.")
 
 (defun systemd-get-value (start)
