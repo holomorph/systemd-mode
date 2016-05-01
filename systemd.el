@@ -220,8 +220,7 @@
 ;;;###autoload
 (defconst systemd-dropin-autoload-regexp
   (eval-when-compile
-    (rx "/systemd/" (+? anything) ".d/"
-        (+? (any "a-zA-Z0-9-_.@\\")) ".conf" string-end))
+    (rx "/systemd/" (+? anything) ".d/" (+? (not (any ?/))) ".conf" string-end))
   "Regexp for dropin config file buffers in which to autoload `systemd-mode'.")
 
 (defun systemd-get-value (start)

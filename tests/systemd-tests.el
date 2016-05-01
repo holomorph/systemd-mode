@@ -73,7 +73,12 @@ only if in an appropriately named parent directory."
     (should (string-match-p re "/systemd/dog.socket.d/woof.conf"))
     (should-not (string-match-p re "foobar.conf"))
     (should-not (string-match-p re "/etc/modprobe.d/bonding.conf"))
-    (should-not (string-match-p re "/etc/systemd/system.conf"))))
+    (should-not (string-match-p re "/etc/systemd/system.conf"))
+    ;; No restrictions on the base name
+    (should (string-match-p re ".config/systemd/user/foo.timer.d/კულტის.conf"))
+    (should (string-match-p re "/etc/systemd/user/c.service.d/a\nb.conf"))
+    ;; Do not match inside a subdirectory of foobar.d/
+    (should-not (string-match-p re ".config/systemd/user/foo.timer.d/a/b.conf"))))
 
 (provide 'systemd-tests)
 
