@@ -317,12 +317,12 @@ file, defaulting to the link under point, if any."
     (`post-completion (if (not (systemd-buffer-section-p)) (insert "=")))))
 
 (defvar systemd-font-lock-keywords
-  `(("^\\([#;]\\)\\(.*\\)$"
+  `(("^[[:space:]]\\([#;]\\)\\(.*\\)$"
      (1 'font-lock-comment-delimiter-face)
      (2 'font-lock-comment-face))
     ("\\\\$" 0 'font-lock-warning-face) ; line break
     ;; sections
-    ("^\\(\\[\\(?:X-\\)?[[:upper:]][[:alnum:]]+\\]\\)"
+    ("^\\(\\[\\([[:upper:]][[:alnum:]]+\\|X-.*?\\)\\]\\)"
      1 'font-lock-type-face)
     ;; keys
     ("^\\([[:upper:]][[:alnum:]]+\\)="
