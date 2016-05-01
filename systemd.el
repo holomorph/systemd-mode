@@ -207,7 +207,7 @@
 
 (defconst systemd-tempfn-autoload-regexp
   (eval-when-compile
-    (rx ".#" 
+    (rx ".#"
         (or (and (+? (any "a-zA-Z0-9-_.@\\")) "."
                  (or "automount" "busname" "mount" "service" "slice"
                      "socket" "swap" "target" "timer" "link" "netdev" "network"))
