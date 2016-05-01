@@ -8,6 +8,11 @@ EMACS = emacs
 
 all: $(SRC:.el=.elc)
 
+check: tests/systemd-tests.el systemd.elc
+	@$(EMACS) -Q --batch -L . --eval "(progn \
+		(load-file \"tests/systemd-tests.el\") \
+		(ert-run-tests-batch-and-exit))"
+
 clean:
 	$(RM) $(SRC:.el=.elc)
 
@@ -18,4 +23,4 @@ install:
 .el.elc:
 	$(EMACS) -L . --batch -f batch-byte-compile $<
 
-.PHONY: all clean install
+.PHONY: all check clean install
