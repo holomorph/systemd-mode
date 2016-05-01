@@ -197,6 +197,7 @@
     "VendorClassIdentifier" "Virtualization" "WakeOnLan")
   "Network configuration directives for systemd 228.")
 
+;;;###autoload
 (defconst systemd-autoload-regexp
   (eval-when-compile
     (rx (+? (any "a-zA-Z0-9-_.@\\")) "."
@@ -205,6 +206,7 @@
         string-end))
   "Regexp for file buffers in which to autoload `systemd-mode'.")
 
+;;;###autoload
 (defconst systemd-tempfn-autoload-regexp
   (eval-when-compile
     (rx ".#"
@@ -215,6 +217,7 @@
         (= 16 (char hex-digit)) string-end))
   "Regexp for temp file buffers in which to autoload `systemd-mode'.")
 
+;;;###autoload
 (defconst systemd-dropin-autoload-regexp
   (eval-when-compile
     (rx "/systemd/" (+? anything) ".d/"
@@ -361,12 +364,9 @@ See systemd.unit(5) for details on unit file syntax.")
     ["Open systemd.directives(7)" systemd-doc-directives
      :help "Index of configuration directives"]))
 
-;;;###autoload
-(add-to-list 'auto-mode-alist `(,systemd-autoload-regexp . systemd-mode))
-;;;###autoload
-(add-to-list 'auto-mode-alist `(,systemd-tempfn-autoload-regexp . systemd-mode))
-;;;###autoload
-(add-to-list 'auto-mode-alist `(,systemd-dropin-autoload-regexp . systemd-mode))
+;;;###autoload (add-to-list 'auto-mode-alist `(,systemd-autoload-regexp . systemd-mode))
+;;;###autoload (add-to-list 'auto-mode-alist `(,systemd-tempfn-autoload-regexp . systemd-mode))
+;;;###autoload (add-to-list 'auto-mode-alist `(,systemd-dropin-autoload-regexp . systemd-mode))
 
 ;;;###autoload
 (define-derived-mode systemd-mode conf-mode "Systemd"
