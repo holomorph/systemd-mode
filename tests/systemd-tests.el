@@ -36,7 +36,7 @@ e.g. scope files which are created programmatically."
     (should-not (string-match-p re "busname"))
     ;; Do not match empty unit name
     (should-not (string-match-p re ".service"))
-    ;; Non-ASCII exceptions
+    ;; Non-alphanumeric ASCII exceptions
     (should (string-match-p re "-.mount"))
     (should (string-match-p re "dev-dm\\x2d4.service"))
     (should (string-match-p re "proc-sys-fs-binfmt_misc.automount"))
