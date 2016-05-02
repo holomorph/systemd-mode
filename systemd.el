@@ -70,9 +70,10 @@
                 (function :tag "Other function"))
   :group 'systemd)
 
-(defcustom systemd-use-company-p nil
-  "Whether to use `company-mode' for completion, if available."
-  :type 'boolean
+(defcustom systemd-mode-hook nil
+  "Hook run after entering `systemd-mode'."
+  :type 'hook
+  :options '(company-mode)
   :group 'systemd)
 
 (defconst systemd-unit-sections
@@ -380,8 +381,6 @@ Key bindings:
 \\{systemd-mode-map}"
   (set-keymap-parent systemd-mode-map nil)
   (conf-mode-initialize systemd-comment-start)
-  (if (and systemd-use-company-p (fboundp 'company-mode))
-      (company-mode 1))
   (add-hook 'company-backends #'systemd-company-backend)
   (add-hook 'completion-at-point-functions #'systemd-complete-at-point)
   (setq-local font-lock-defaults '(systemd-font-lock-keywords)))
