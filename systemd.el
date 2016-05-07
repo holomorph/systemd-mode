@@ -81,86 +81,11 @@
   "Configuration sections for systemd 225.")
 
 (defconst systemd-unit-directives
-  ;; TODO: keep a script of sorts for generating this list.  systemd
-  ;; source has a python script in tools/ for parsing the
-  ;; documentation xml for the unit directives.
-  ;;
-  ;; forcer on freenode threw together a curl monstrosity for achieving
-  ;; the same:
-  ;; curl -s http://www.freedesktop.org/software/systemd/man/systemd.directives.html | tr -d '\n' | sed 's/>/>\n/g' | sed -ne '/Unit directives/,/Options on the kernel/p' | sed -ne 's/.*<dt id="\([^-][^"]*\)=">.*/\1/p'
-  ;; Quote, wrap with fill-column at 72, insert into list and indent
-  '("Accept" "AccuracySec" "After" "Alias" "AllowIsolate" "Also"
-    "AppArmorProfile" "AssertACPower" "AssertArchitecture"
-    "AssertCapability" "AssertDirectoryNotEmpty" "AssertFileIsExecutable"
-    "AssertFileNotEmpty" "AssertFirstBoot" "AssertHost"
-    "AssertKernelCommandLine" "AssertNeedsUpdate" "AssertPathExists"
-    "AssertPathExistsGlob" "AssertPathIsDirectory" "AssertPathIsMountPoint"
-    "AssertPathIsReadWrite" "AssertPathIsSymbolicLink" "AssertSecurity"
-    "AssertVirtualization" "Backlog" "Before" "BindIPv6Only" "BindToDevice"
-    "BindsTo" "BlockIOAccounting" "BlockIODeviceWeight"
-    "BlockIOReadBandwidth" "BlockIOWeight" "BlockIOWriteBandwidth"
-    "Broadcast" "BusName" "BusPolicy" "CPUAccounting" "CPUAffinity"
-    "CPUQuota" "CPUSchedulingPolicy" "CPUSchedulingPriority"
-    "CPUSchedulingResetOnFork" "CPUShares" "Capabilities"
-    "CapabilityBoundingSet" "ConditionACPower" "ConditionArchitecture"
-    "ConditionCapability" "ConditionDirectoryNotEmpty"
-    "ConditionFileIsExecutable" "ConditionFileNotEmpty" "ConditionFirstBoot"
-    "ConditionHost" "ConditionKernelCommandLine" "ConditionNeedsUpdate"
-    "ConditionPathExists" "ConditionPathExistsGlob"
-    "ConditionPathIsDirectory" "ConditionPathIsMountPoint"
-    "ConditionPathIsReadWrite" "ConditionPathIsSymbolicLink"
-    "ConditionSecurity" "ConditionVirtualization" "Conflicts"
-    "DefaultDependencies" "DefaultInstance" "DeferAcceptSec" "Delegate"
-    "Description" "DeviceAllow" "DevicePolicy" "DirectoryMode"
-    "DirectoryNotEmpty" "Documentation" "Environment" "EnvironmentFile"
-    "ExecReload" "ExecStart" "ExecStartPost" "ExecStartPre" "ExecStop"
-    "ExecStopPost" "ExecStopPre" "FailureAction" "FileDescriptorName"
-    "FileDescriptorStoreMax" "FreeBind" "Group" "GuessMainPID"
-    "IOSchedulingClass" "IOSchedulingPriority" "IPTOS" "IPTTL"
-    "IgnoreOnIsolate" "IgnoreSIGPIPE" "InaccessibleDirectories"
-    "JobTimeoutAction" "JobTimeoutRebootArgument" "JobTimeoutSec"
-    "JoinsNamespaceOf" "KeepAlive" "KeepAliveIntervalSec" "KeepAliveProbes"
-    "KeepAliveTimeSec" "KillMode" "KillSignal" "LimitAS" "LimitCORE"
-    "LimitCPU" "LimitDATA" "LimitFSIZE" "LimitLOCKS" "LimitMEMLOCK"
-    "LimitMSGQUEUE" "LimitNICE" "LimitNOFILE" "LimitNPROC" "LimitRSS"
-    "LimitRTPRIO" "LimitRTTIME" "LimitSIGPENDING" "LimitSTACK"
-    "ListenDatagram" "ListenFIFO" "ListenMessageQueue" "ListenNetlink"
-    "ListenSequentialPacket" "ListenSpecial" "ListenStream"
-    "ListenUSBFunction" "MakeDirectory" "Mark" "MaxConnections"
-    "MemoryAccounting" "MemoryLimit" "MessageQueueMaxMessages"
-    "MessageQueueMessageSize" "MountFlags" "NetClass" "Nice" "NoDelay"
-    "NoNewPrivileges" "NonBlocking" "NotifyAccess" "OOMScoreAdjust"
-    "OnActiveSec" "OnBootSec" "OnCalendar" "OnFailure" "OnFailureJobMode"
-    "OnStartupSec" "OnUnitActiveSec" "OnUnitInactiveSec" "Options" "PAMName"
-    "PIDFile" "PartOf" "PassCredentials" "PassEnvironment" "PassSecurity"
-    "PathChanged" "PathExists" "PathExistsGlob" "PathModified"
-    "PermissionsStartOnly" "Persistent" "Personality" "PipeSize" "Priority"
-    "PrivateDevices" "PrivateNetwork" "PrivateTmp" "PropagatesReloadTo"
-    "ProtectHome" "ProtectSystem" "RandomSec" "ReadOnlyDirectories"
-    "ReadWriteDirectories" "RebootArgument" "ReceiveBuffer"
-    "RefuseManualStart" "RefuseManualStop" "ReloadPropagatedFrom"
-    "RemainAfterElapse" "RemainAfterExit" "RemoveOnStop" "RequiredBy"
-    "Requires" "RequiresMountsFor" "Requisite" "Restart"
-    "RestartForceExitStatus" "RestartPreventExitStatus" "RestartSec"
-    "RestrictAddressFamilies" "ReusePort" "RootDirectory"
-    "RootDirectoryStartOnly" "RuntimeDirectory" "RuntimeDirectoryMode"
-    "SELinuxContext" "SELinuxContextFromNet" "SecureBits" "SendBuffer"
-    "SendSIGHUP" "SendSIGKILL" "Service" "Slice" "SloppyOptions"
-    "SmackLabel" "SmackLabelIPIn" "SmackLabelIPOut" "SmackProcessLabel"
-    "SocketGroup" "SocketMode" "SocketProtocol" "SocketUser" "Sockets"
-    "SourcePath" "StandardError" "StandardInput" "StandardOutput"
-    "StartLimitAction" "StartLimitBurst" "StartLimitInterval"
-    "StartupBlockIOWeight" "StartupCPUShares" "StopWhenUnneeded"
-    "SuccessExitStatus" "SupplementaryGroups" "Symlinks" "SyslogFacility"
-    "SyslogIdentifier" "SyslogLevel" "SyslogLevelPrefix"
-    "SystemCallArchitectures" "SystemCallErrorNumber" "SystemCallFilter"
-    "TCPCongestion" "TTYPath" "TTYReset" "TTYVHangup" "TTYVTDisallocate"
-    "TasksAccounting" "TasksMax" "TimeoutIdleSec" "TimeoutSec"
-    "TimeoutStartSec" "TimeoutStopSec" "TimerSlackNSec" "Transparent" "Type"
-    "UMask" "USBFunctionDescriptors" "USBFunctionStrings" "Unit" "User"
-    "UtmpIdentifier" "UtmpMode" "WakeSystem" "WantedBy" "Wants"
-    "WatchdogSec" "What" "Where" "WorkingDirectory" "Writable")
-  "Configuration directives for systemd 228.")
+  (eval-when-compile
+    (with-temp-buffer
+      (insert-file-contents "unit-directives.txt")
+      (split-string (buffer-string))))
+  "Configuration directives for systemd.")
 
 (defconst systemd-network-sections
   '("Match" "Link" "NetDev" "VLAN" "MACVLAN" "MACVTAP" "IPVLAN" "VXLAN"
@@ -169,34 +94,11 @@
   "Network configuration sections for systemd 225.")
 
 (defconst systemd-network-directives
-  ;; /Network directives/,/Journal fields/p
-  '("ARPAllTargets" "ARPIPTargets" "ARPIntervalSec" "ARPProxy" "ARPValidate"
-    "AdSelect" "Address" "AllSlavesActive" "AllowPortToBeRoot"
-    "Architecture" "BindCarrier" "BitsPerSecond" "Bond" "Bridge"
-    "ClientIdentifier" "CopyDSCP" "Cost" "CriticalConnection" "DHCP"
-    "DHCPServer" "DNS" "DefaultLeaseTimeSec" "Description" "Destination" "DiscoverPathMTU"
-    "Domains" "DownDelaySec" "Driver" "Duplex" "EmitDNS" "EmitNTP"
-    "EmitTimezone" "EncapsulationLimit" "FDBAgeingSec" "FailOverMACPolicy"
-    "FallbackDNS" "FallbackNTP" "FastLeave" "ForwardDelaySec" "Gateway"
-    "GratuitousARP" "GroupPolicyExtension" "HairPin" "HelloTimeSec" "Host"
-    "Hostname" "IPForward" "IPMasquerade" "IPv4LLRoute"
-    "IPv6AcceptRouterAdvertisements" "IPv6DuplicateAddressDetection"
-    "IPv6FlowLabel" "IPv6HopLimit" "IPv6PrivacyExtensions" "IPv6Token" "Id"
-    "KernelCommandLine" "Kind" "L2MissNotification" "L3MissNotification"
-    "LACPTransmitRate" "LLDP" "LLMNR" "Label" "LearnPacketIntervalSec"
-    "LinkLocalAddressing" "Local" "MACAddress" "MACAddressPolicy" "MACVLAN"
-    "MIIMonitorSec" "MTUBytes" "MacLearning" "MaxAgeSec" "MaxLeaseTimeSec"
-    "MaximumFDBEntries" "Metric" "MinLinks" "Mode" "MultiQueue" "NTP" "Name"
-    "NamePolicy" "OneQueue" "OriginalName" "PacketInfo" "PacketsPerSlave"
-    "Path" "Peer" "PoolOffset" "PoolSize" "PreferredSource"
-    "PrimaryReselectPolicy" "Remote" "RequestBroadcast" "ResendIGMP"
-    "RouteMetric" "RouteShortCircuit" "Scope" "SendHostname" "Source" "TOS"
-    "TTL" "Timezone" "TransmitHashPolicy" "Tunnel" "UDP6ZeroCheckSumRx"
-    "UDP6ZeroChecksumTx" "UDPCheckSum" "UnicastFlood" "UpDelaySec" "UseBPDU"
-    "UseDNS" "UseDomains" "UseHostname" "UseMTU" "UseNTP" "UseRoutes"
-    "UseTimezone" "VLAN" "VLANId" "VNetHeader" "VXLAN"
-    "VendorClassIdentifier" "Virtualization" "WakeOnLan")
-  "Network configuration directives for systemd 228.")
+  (eval-when-compile
+    (with-temp-buffer
+      (insert-file-contents "network-directives.txt")
+      (split-string (buffer-string))))
+  "Network configuration directives for systemd.")
 
 ;;;###autoload
 (defconst systemd-autoload-regexp
