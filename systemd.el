@@ -220,24 +220,24 @@ file, defaulting to the link under point, if any."
     (`post-completion (if (not (systemd-buffer-section-p)) (insert "=")))))
 
 (defvar systemd-font-lock-keywords
-  `(("^[[:space:]]*?\\([#;]\\)\\(.*\\)$"
-     (1 'font-lock-comment-delimiter-face)
-     (2 'font-lock-comment-face))
-    ("\\\\$" 0 'font-lock-warning-face) ; line break
-    ;; sections
-    ("^\\(\\[\\([[:upper:]][[:alnum:]]+\\|X-.*?\\)\\]\\)"
-     1 'font-lock-type-face)
-    ;; keys
-    ("^\\([[:upper:]][[:alnum:]]+\\)="
-     1 'font-lock-keyword-face)
-    ;; boolean arguments
-    ("=\\(1\\|yes\\|true\\|on\\|0\\|no\\|false\\|off\\)$"
-     1 'font-lock-constant-face)
-    ;; specifiers
-    ("%[nNpPiIfcrRtuUhsmbHv%]" 0 'font-lock-constant-face)
-    ;; exec prefixes
-    ("=\\(-@\\|@-\\|[@-]\\)"
-     1 'font-lock-negation-char-face))
+  (eval-when-compile
+    `(("^[[:space:]]*?\\([#;]\\)\\(.*\\)$"
+       (1 font-lock-comment-delimiter-face)
+       (2 font-lock-comment-face))
+      ("\\\\$" 0 font-lock-warning-face) ; line break
+      ;; sections
+      ("^\\(\\[\\([[:upper:]][[:alnum:]]+\\|X-.*?\\)\\]\\)"
+       1 font-lock-type-face)
+      ;; keys
+      ("^\\([[:upper:]][[:alnum:]]+\\)="
+       1 font-lock-keyword-face)
+      ;; boolean arguments
+      (,(rx "=" (group (or "yes" "true" "on" "0" "no" "false" "off")) eol)
+       1 font-lock-constant-face)
+      ;; specifiers
+      ("%[nNpPiIfcrRtuUhsmbHv%]" 0 font-lock-constant-face)
+      ;; exec prefixes
+      ("=\\(-@\\|@-\\|[@-]\\)" 1 font-lock-negation-char-face)))
   "Default expressions to highlight in `systemd-mode'.
 See systemd.unit(5) for details on unit file syntax.")
 
