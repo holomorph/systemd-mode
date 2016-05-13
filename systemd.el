@@ -243,10 +243,6 @@ See systemd.unit(5) for details on unit file syntax.")
 
 (defvar systemd-mode-syntax-table
   (let ((table (make-syntax-table)))
-    (modify-syntax-entry ?\' "." table)
-    (modify-syntax-entry ?\" "." table)
-    (modify-syntax-entry ?\; " " table)
-    (modify-syntax-entry ?\n ">" table)
     (modify-syntax-entry ?\% "\\" table)
     table)
   "Syntax table used in `systemd-mode' buffers.")
@@ -285,7 +281,7 @@ Key bindings:
   (conf-mode-initialize systemd-comment-start)
   (add-hook 'company-backends #'systemd-company-backend nil t)
   (add-hook 'completion-at-point-functions #'systemd-complete-at-point nil t)
-  (setq font-lock-defaults '(systemd-font-lock-keywords)))
+  (setq font-lock-defaults '(systemd-font-lock-keywords t)))
 
 (provide 'systemd)
 
