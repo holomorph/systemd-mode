@@ -21,6 +21,8 @@ DHCPServer
 DNS
 DNSSEC
 DNSSECNegativeTrustAnchors
+DUIDRawData
+DUIDType
 DefaultLeaseTimeSec
 Description
 Destination
@@ -33,6 +35,7 @@ Duplex
 EmitDNS
 EmitLLDP
 EmitNTP
+EmitRouter
 EmitTimezone
 EncapsulationLimit
 FDBAgeingSec
@@ -48,6 +51,7 @@ HairPin
 HelloTimeSec
 Host
 Hostname
+IAID
 IPForward
 IPMasquerade
 IPv4LLRoute
@@ -83,6 +87,8 @@ MinLinks
 Mode
 MultiQueue
 MulticastDNS
+MulticastQuerier
+MulticastSnooping
 NTP
 Name
 NamePolicy
@@ -95,8 +101,10 @@ Peer
 PoolOffset
 PoolSize
 PortRange
+PreferredLifetime
 PreferredSource
 PrimaryReselectPolicy
+ProxyARP
 Remote
 RequestBroadcast
 ResendIGMP
@@ -107,6 +115,7 @@ SendHostname
 Source
 TOS
 TTL
+Table
 Timezone
 TransmitHashPolicy
 Tunnel

@@ -88,8 +88,15 @@ FileDescriptorStoreMax
 FreeBind
 Group
 GuessMainPID
+IOAccounting
+IODeviceWeight
+IOReadBandwidthMax
+IOReadIOPSMax
 IOSchedulingClass
 IOSchedulingPriority
+IOWeight
+IOWriteBandwidthMax
+IOWriteIOPSMax
 IPTOS
 IPTTL
 IgnoreOnIsolate
@@ -223,9 +230,10 @@ StandardInput
 StandardOutput
 StartLimitAction
 StartLimitBurst
-StartLimitInterval
+StartLimitIntervalSec
 StartupBlockIOWeight
 StartupCPUShares
+StartupIOWeight
 StopWhenUnneeded
 SuccessExitStatus
 SupplementaryGroups
@@ -250,6 +258,8 @@ TimeoutStartSec
 TimeoutStopSec
 TimerSlackNSec
 Transparent
+TriggerLimitBurst
+TriggerLimitIntervalSec
 Type
 UMask
 USBFunctionDescriptors
