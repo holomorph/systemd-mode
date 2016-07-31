@@ -101,7 +101,7 @@ IPTOS
 IPTTL
 IgnoreOnIsolate
 IgnoreSIGPIPE
-InaccessibleDirectories
+InaccessiblePaths
 JobTimeoutAction
 JobTimeoutRebootArgument
 JobTimeoutSec
@@ -140,7 +140,11 @@ MakeDirectory
 Mark
 MaxConnections
 MemoryAccounting
+MemoryDenyWriteExecute
+MemoryHigh
 MemoryLimit
+MemoryLow
+MemoryMax
 MessageQueueMaxMessages
 MessageQueueMessageSize
 MountFlags
@@ -181,8 +185,8 @@ PropagatesReloadTo
 ProtectHome
 ProtectSystem
 RandomizedDelaySec
-ReadOnlyDirectories
-ReadWriteDirectories
+ReadOnlyPaths
+ReadWritePaths
 RebootArgument
 ReceiveBuffer
 RefuseManualStart
@@ -200,6 +204,7 @@ RestartForceExitStatus
 RestartPreventExitStatus
 RestartSec
 RestrictAddressFamilies
+RestrictRealtime
 ReusePort
 RootDirectory
 RootDirectoryStartOnly

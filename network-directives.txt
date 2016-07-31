@@ -12,6 +12,7 @@ BindCarrier
 BitsPerSecond
 Bond
 Bridge
+Cache
 ClientIdentifier
 CopyDSCP
 Cost
@@ -32,6 +33,7 @@ Domains
 DownDelaySec
 Driver
 Duplex
+EgressUntagged
 EmitDNS
 EmitLLDP
 EmitNTP
@@ -55,14 +57,16 @@ IAID
 IPForward
 IPMasquerade
 IPv4LLRoute
-IPv6AcceptRouterAdvertisements
+IPv6AcceptRA
 IPv6DuplicateAddressDetection
 IPv6FlowLabel
 IPv6HopLimit
 IPv6PrivacyExtensions
 IPv6Token
 Id
+InputKey
 KernelCommandLine
+Key
 Kind
 L2MissNotification
 L3MissNotification
@@ -94,6 +98,8 @@ Name
 NamePolicy
 OneQueue
 OriginalName
+OutputKey
+PVID
 PacketInfo
 PacketsPerSlave
 Path
@@ -133,8 +139,10 @@ UseNTP
 UseRoutes
 UseTimezone
 VLAN
+VLANFiltering
 VLANId
 VNetHeader
+VRF
 VXLAN
 VendorClassIdentifier
 Virtualization
