@@ -83,7 +83,10 @@
 (defconst systemd-unit-directives
   (eval-when-compile
     (with-temp-buffer
-      (insert-file-contents "unit-directives.txt")
+      (insert-file-contents
+       (let ((f "unit-directives.txt"))
+         (if (null load-file-name) f
+           (expand-file-name f (file-name-directory load-file-name)))))
       (split-string (buffer-string))))
   "Configuration directives for systemd.")
 
@@ -96,7 +99,10 @@
 (defconst systemd-network-directives
   (eval-when-compile
     (with-temp-buffer
-      (insert-file-contents "network-directives.txt")
+      (insert-file-contents
+       (let ((f "network-directives.txt"))
+         (if (null load-file-name) f
+           (expand-file-name f (file-name-directory load-file-name)))))
       (split-string (buffer-string))))
   "Network configuration directives for systemd.")
 
