@@ -243,6 +243,7 @@ file, defaulting to the link under point, if any."
       ;; specifiers
       ("%[nNpPiIfcrRtuUhsmbHv%]" 0 'font-lock-constant-face)
       ;; exec prefixes
+      ;; TODO account for @ being a prefix now
       ("=\\(-@\\|@-\\|[@-]\\)" 1 'font-lock-negation-char-face)))
   "Default expressions to highlight in `systemd-mode'.
 See systemd.unit(5) for details on unit file syntax.")
