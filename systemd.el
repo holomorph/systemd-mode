@@ -73,7 +73,7 @@
 (defcustom systemd-mode-hook nil
   "Hook run after entering `systemd-mode'."
   :type 'hook
-  :options '(company-mode)
+  :options '(company-mode flycheck-mode)
   :group 'systemd)
 
 (defconst systemd-unit-sections
