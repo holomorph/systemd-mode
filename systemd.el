@@ -285,7 +285,7 @@ Key bindings:
 \\{systemd-mode-map}"
   (set-keymap-parent systemd-mode-map nil)
   (conf-mode-initialize systemd-comment-start)
-  (add-hook 'company-backends #'systemd-company-backend nil)
+  (add-hook 'company-backends #'systemd-company-backend)
   (add-hook 'completion-at-point-functions #'systemd-complete-at-point nil t)
   (setq font-lock-defaults '(systemd-font-lock-keywords t)))
 
