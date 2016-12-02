@@ -43,6 +43,7 @@ CPUSchedulingPolicy
 CPUSchedulingPriority
 CPUSchedulingResetOnFork
 CPUShares
+CPUWeight
 CapabilityBoundingSet
 ConditionACPower
 ConditionArchitecture
@@ -73,6 +74,7 @@ DevicePolicy
 DirectoryMode
 DirectoryNotEmpty
 Documentation
+DynamicUser
 Environment
 EnvironmentFile
 ExecReload
@@ -85,6 +87,7 @@ ExecStopPre
 FailureAction
 FileDescriptorName
 FileDescriptorStoreMax
+ForceUnmount
 FreeBind
 Group
 GuessMainPID
@@ -112,6 +115,7 @@ KeepAliveProbes
 KeepAliveTimeSec
 KillMode
 KillSignal
+LazyUnmount
 LimitAS
 LimitCORE
 LimitCPU
@@ -139,12 +143,14 @@ ListenUSBFunction
 MakeDirectory
 Mark
 MaxConnections
+MaxConnectionsPerSource
 MemoryAccounting
 MemoryDenyWriteExecute
 MemoryHigh
 MemoryLimit
 MemoryLow
 MemoryMax
+MemorySwapMax
 MessageQueueMaxMessages
 MessageQueueMessageSize
 MountFlags
@@ -181,8 +187,12 @@ Priority
 PrivateDevices
 PrivateNetwork
 PrivateTmp
+PrivateUsers
 PropagatesReloadTo
+ProtectControlGroups
 ProtectHome
+ProtectKernelModules
+ProtectKernelTunables
 ProtectSystem
 RandomizedDelaySec
 ReadOnlyPaths
@@ -194,6 +204,7 @@ RefuseManualStop
 ReloadPropagatedFrom
 RemainAfterElapse
 RemainAfterExit
+RemoveIPC
 RemoveOnStop
 RequiredBy
 Requires
@@ -238,6 +249,7 @@ StartLimitBurst
 StartLimitIntervalSec
 StartupBlockIOWeight
 StartupCPUShares
+StartupCPUWeight
 StartupIOWeight
 StopWhenUnneeded
 SuccessExitStatus
