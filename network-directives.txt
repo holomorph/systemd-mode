@@ -30,6 +30,7 @@ DUIDRawData
 DUIDType
 DefaultLeaseTimeSec
 Description
+DefaultPVID
 Destination
 DestinationPort
 DiscoverPathMTU
