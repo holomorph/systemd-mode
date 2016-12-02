@@ -194,7 +194,7 @@ file, defaulting to the link under point, if any."
   "Return t if current line begins with \"[\", otherwise nil."
   (save-excursion
     (beginning-of-line)
-    (looking-at "\\[")))
+    (= (following-char) ?\[)))
 
 (defun systemd-buffer-network-p ()
   "Return non-nil if `buffer-name' has a network-type extension, otherwise nil."
