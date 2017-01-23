@@ -1,5 +1,5 @@
 SRC = systemd.el
-DATA = unit-directives.txt network-directives.txt
+DATA = unit-directives.txt network-directives.txt nspawn-directives.txt
 DISTFILES := Makefile $(SRC) $(DATA) LICENSE README systemd-pkg.el tests
 
 VERSION := $(shell awk '/^;; Version:/ {print $$3}' $(SRC))

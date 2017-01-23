@@ -106,6 +106,20 @@
       (split-string (buffer-string))))
   "Network configuration directives for systemd.")
 
+(defconst systemd-nspawn-sections
+  '("Exec" "Files" "Network")
+  "Namespace container configuration sections for systemd 232.")
+
+(defconst systemd-nspawn-directives
+  (eval-when-compile
+    (with-temp-buffer
+      (insert-file-contents
+       (let ((f "nspawn-directives.txt"))
+         (if (null load-file-name) f
+           (expand-file-name f (file-name-directory load-file-name)))))
+      (split-string (buffer-string))))
+  "Namespace container configuration directives for systemd.")
+
 ;;;###autoload
 (defconst systemd-autoload-regexp
   (eval-when-compile
@@ -196,18 +210,26 @@ file, defaulting to the link under point, if any."
     (beginning-of-line)
     (= (following-char) ?\[)))
 
-(defun systemd-buffer-network-p ()
-  "Return non-nil if `buffer-name' has a network-type extension, otherwise nil."
+(defun systemd-file-network-p (filename)
+  "Return non-nil if FILENAME has a network-type extension, otherwise nil."
   (string-match-p (eval-when-compile
                     (rx "." (or "link" "netdev" "network") string-end))
-                  (buffer-name)))
+                  filename))
+
+(defun systemd-file-nspawn-p (filename)
+  "Return non-nil if FILENAME has an nspawn extension, otherwise nil."
+  (string-match-p (eval-when-compile (rx ".nspawn" string-end)) filename))
 
 (defun systemd-completion-table (&rest _ignore)
   "Return a list of completion candidates."
-  (let ((sectionp (systemd-buffer-section-p)))
-    (if (systemd-buffer-network-p)
-        (if sectionp systemd-network-sections systemd-network-directives)
-      (if sectionp systemd-unit-sections systemd-unit-directives))))
+  (let ((sectionp (systemd-buffer-section-p))
+        (name (buffer-name)))
+    (cond
+     ((systemd-file-nspawn-p name)
+      (if sectionp systemd-nspawn-sections systemd-nspawn-directives))
+     ((systemd-file-network-p name)
+      (if sectionp systemd-network-sections systemd-network-directives))
+     (t (if sectionp systemd-unit-sections systemd-unit-directives)))))
 
 (defun systemd-complete-at-point ()
   "Complete the symbol at point."
@@ -269,6 +291,7 @@ See systemd.unit(5) for details on unit file syntax.")
     ["Open systemd.directives(7)" systemd-doc-directives
      :help "Index of configuration directives"]))
 
+;;;###autoload (add-to-list 'auto-mode-alist '("\\.nspawn\\'" . systemd-mode))
 ;;;###autoload (add-to-list 'auto-mode-alist `(,systemd-autoload-regexp . systemd-mode))
 ;;;###autoload (add-to-list 'auto-mode-alist `(,systemd-tempfn-autoload-regexp . systemd-mode))
 ;;;###autoload (add-to-list 'auto-mode-alist `(,systemd-dropin-autoload-regexp . systemd-mode))
