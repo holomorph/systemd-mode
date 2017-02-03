@@ -150,14 +150,12 @@
   "Return the value of the key whose value begins at position START.
 Lines ending in a backslash are concatenated with the next
 according to systemd.unit(5)."
-  (let ((break "\\\\\n")
-        end)
+  (let (end)
     (save-excursion
-      (while (progn (goto-char (1- (line-end-position)))
-                    (looking-at break))
+      (while (= (char-before (line-end-position)) ?\\)
         (forward-line))
       (setq end (line-end-position))
-      (replace-regexp-in-string break " " (buffer-substring start end)))))
+      (replace-regexp-in-string "\\\\\n" " " (buffer-substring start end)))))
 
 (defun systemd-doc-find ()
   "Find the value of the unit's “Documentation” keys.
