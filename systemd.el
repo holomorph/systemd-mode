@@ -3,7 +3,7 @@
 ;; Copyright (C) 2014-2017  Mark Oteiza <mvoteiza@udel.edu>
 
 ;; Author: Mark Oteiza <mvoteiza@udel.edu>
-;; Version: 1.4.1
+;; Version: 1.5
 ;; Package-Requires: ((emacs "24.4"))
 ;; Keywords: tools, unix
 
