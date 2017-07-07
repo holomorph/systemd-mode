@@ -83,4 +83,3 @@ only if in an appropriately named parent directory."
 (provide 'systemd-tests)
 
 ;;; systemd-tests.el ends here
-
