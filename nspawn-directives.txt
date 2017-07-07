@@ -4,8 +4,8 @@ Parameters
 Environment
 User
 WorkingDirectory
+PivotRoot
 Capability
-DropCapability
 KillSignal
 Personality
 MachineID
@@ -14,15 +14,14 @@ NotifyReady
 ReadOnly
 Volatile
 Bind
-BindReadOnly
 TemporaryFileSystem
+Overlay
 PrivateUsersChown
 Private
 VirtualEthernet
 VirtualEthernetExtra
 Interface
 MACVLAN
-IPVLAN
 Bridge
 Zone
 Port

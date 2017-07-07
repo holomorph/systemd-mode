@@ -27,6 +27,8 @@ AssertVirtualization
 Backlog
 Before
 BindIPv6Only
+BindPaths
+BindReadOnlyPaths
 BindToDevice
 BindsTo
 BlockIOAccounting
@@ -153,6 +155,7 @@ MemoryMax
 MemorySwapMax
 MessageQueueMaxMessages
 MessageQueueMessageSize
+MountAPIVFS
 MountFlags
 Nice
 NoDelay
@@ -215,10 +218,12 @@ RestartForceExitStatus
 RestartPreventExitStatus
 RestartSec
 RestrictAddressFamilies
+RestrictNamespaces
 RestrictRealtime
 ReusePort
 RootDirectory
 RootDirectoryStartOnly
+RootImage
 RuntimeDirectory
 RuntimeDirectoryMode
 RuntimeMaxSec

@@ -2,8 +2,8 @@ ARP
 ARPAllTargets
 ARPIPTargets
 ARPIntervalSec
-ARPProxy
 ARPValidate
+ActiveSlave
 AdSelect
 Address
 AgeingTimeSec
@@ -11,6 +11,7 @@ AllSlavesActive
 AllowPortToBeRoot
 Architecture
 AutoJoin
+AutoNegotiation
 BindCarrier
 BitsPerSecond
 Bond
@@ -66,11 +67,13 @@ IAID
 IPForward
 IPMasquerade
 IPv4LLRoute
+IPv4ProxyARP
 IPv6AcceptRA
 IPv6DuplicateAddressDetection
 IPv6FlowLabel
 IPv6HopLimit
 IPv6PrivacyExtensions
+IPv6ProxyNDPAddress
 IPv6Token
 Id
 InputKey
@@ -86,6 +89,7 @@ Label
 LargeReceiveOffload
 LearnPacketIntervalSec
 LinkLocalAddressing
+ListenPort
 Local
 MACAddress
 MACAddressPolicy
@@ -122,7 +126,8 @@ PreferredLifetime
 PreferredSource
 PrefixRoute
 PrimaryReselectPolicy
-ProxyARP
+PrimarySlave
+ReduceARPProxy
 Remote
 RemoteChecksumRx
 RemoteChecksumTx
@@ -147,6 +152,7 @@ UDP6ZeroChecksumTx
 UDPChecksum
 UDPSegmentationOffload
 UnicastFlood
+Unmanaged
 UpDelaySec
 UseBPDU
 UseDNS
