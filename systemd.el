@@ -202,6 +202,21 @@ file, defaulting to the link under point, if any."
   (interactive)
   (systemd-doc-man "systemd.directives(7)"))
 
+(defun systemd-exec-prefix-anchored-matcher (limit)
+  "Matcher for the exec prefix in anchored font-lock rule.
+See `font-lock-keywords' and (info \"(elisp) Search-based Fontification\")."
+  (let ((pos (car (match-data)))
+        (prefixes '(?- ?@ ?+))
+        char end res)
+    (while (and (memq (setq char (following-char)) prefixes)
+                (< (point) limit))
+      (forward-char)
+      (setq prefixes (delq char prefixes))
+      (setq end (point-marker)))
+    (when end
+      (prog1 (setq res (list (1+ pos) end))
+        (set-match-data res)))))
+
 (defun systemd-buffer-section-p ()
   "Return t if current line begins with \"[\", otherwise nil."
   (save-excursion
@@ -255,16 +270,16 @@ file, defaulting to the link under point, if any."
       ("^\\(\\[\\([[:upper:]][[:alnum:]]+\\|X-.*?\\)\\]\\)"
        1 'font-lock-type-face)
       ;; keys
-      ("^\\([[:upper:]][[:alnum:]]+\\)="
-       1 'font-lock-keyword-face)
+      ("^\\([[:upper:]][[:alnum:]]+\\)=" 1 'font-lock-keyword-face)
       ;; boolean arguments
       (,(rx "=" (group (or "yes" "true" "on" "0" "no" "false" "off")) eol)
        1 'font-lock-constant-face)
       ;; specifiers
       ("%[nNpPiIfcrRtuUhsmbHv%]" 0 'font-lock-constant-face)
       ;; exec prefixes
-      ;; TODO account for @ being a prefix now
-      ("=\\(-@\\|@-\\|[@-]\\)" 1 'font-lock-negation-char-face)))
+      ("="
+       (systemd-exec-prefix-anchored-matcher
+        nil nil (0 'font-lock-negation-char-face)))))
   "Default expressions to highlight in `systemd-mode'.
 See systemd.unit(5) for details on unit file syntax.")
 
