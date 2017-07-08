@@ -219,9 +219,7 @@ See `font-lock-keywords' and (info \"(elisp) Search-based Fontification\")."
 
 (defun systemd-buffer-section-p ()
   "Return t if current line begins with \"[\", otherwise nil."
-  (save-excursion
-    (beginning-of-line)
-    (= (following-char) ?\[)))
+  (= (char-after (line-beginning-position)) ?\[))
 
 (defun systemd-file-network-p (filename)
   "Return non-nil if FILENAME has a network-type extension, otherwise nil."
