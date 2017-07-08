@@ -211,7 +211,7 @@ See `font-lock-keywords' and (info \"(elisp) Search-based Fontification\")."
     (while (and (memq (setq char (following-char)) prefixes)
                 (< (point) limit))
       (forward-char)
-      (setq prefixes (delq char prefixes))
+      (setq prefixes (remq char prefixes))
       (setq end (point-marker)))
     (when end
       (prog1 (setq res (list (1+ pos) end))
