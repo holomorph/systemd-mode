@@ -13,6 +13,7 @@ AssertDirectoryNotEmpty
 AssertFileIsExecutable
 AssertFileNotEmpty
 AssertFirstBoot
+AssertGroup
 AssertHost
 AssertKernelCommandLine
 AssertNeedsUpdate
@@ -23,6 +24,7 @@ AssertPathIsMountPoint
 AssertPathIsReadWrite
 AssertPathIsSymbolicLink
 AssertSecurity
+AssertUser
 AssertVirtualization
 Backlog
 Before
@@ -54,6 +56,7 @@ ConditionDirectoryNotEmpty
 ConditionFileIsExecutable
 ConditionFileNotEmpty
 ConditionFirstBoot
+ConditionGroup
 ConditionHost
 ConditionKernelCommandLine
 ConditionNeedsUpdate
@@ -64,6 +67,7 @@ ConditionPathIsMountPoint
 ConditionPathIsReadWrite
 ConditionPathIsSymbolicLink
 ConditionSecurity
+ConditionUser
 ConditionVirtualization
 Conflicts
 DefaultDependencies
@@ -107,6 +111,7 @@ IPTTL
 IgnoreOnIsolate
 IgnoreSIGPIPE
 InaccessiblePaths
+JobRunningTimeoutSec
 JobTimeoutAction
 JobTimeoutRebootArgument
 JobTimeoutSec
