@@ -258,26 +258,32 @@ See `font-lock-keywords' and (info \"(elisp) Search-based Fontification\")."
     (`candidates (all-completions arg (systemd-completion-table nil)))
     (`post-completion (if (not (systemd-buffer-section-p)) (insert "=")))))
 
-(defvar systemd-font-lock-keywords
-  (eval-when-compile
-    `(("^[[:space:]]*?\\([#;]\\)\\(.*\\)$"
-       (1 'font-lock-comment-delimiter-face)
-       (2 'font-lock-comment-face))
-      ("\\\\$" 0 'font-lock-warning-face) ; line break
-      ;; sections
-      ("^\\(\\[\\([[:upper:]][[:alnum:]]+\\|X-.*?\\)\\]\\)"
-       1 'font-lock-type-face)
-      ;; keys
-      ("^\\([[:upper:]][[:alnum:]]+\\)=" 1 'font-lock-keyword-face)
-      ;; boolean arguments
-      (,(rx "=" (group (or "yes" "true" "on" "0" "no" "false" "off")) eol)
-       1 'font-lock-constant-face)
-      ;; specifiers
-      ("%[nNpPiIfcrRtuUhsmbHv%]" 0 'font-lock-constant-face)
-      ;; exec prefixes
-      ("="
-       (systemd-exec-prefix-anchored-matcher
-        nil nil (0 'font-lock-negation-char-face)))))
+(defconst systemd-font-lock-keywords-1
+  `(("^[[:space:]]*?\\([#;]\\)\\(.*\\)$"
+     (1 'font-lock-comment-delimiter-face)
+     (2 'font-lock-comment-face))
+    ;; sections
+    ("^\\(\\[\\([[:upper:]][[:alnum:]]+\\|X-.*?\\)\\]\\)"
+     1 'font-lock-type-face)
+    ;; keys
+    ("^\\([[:upper:]][[:alnum:]]+\\)=" 1 'font-lock-keyword-face))
+  "Minimal expressions to highlight in `systemd-mode'.")
+
+(defconst systemd-font-lock-keywords-2
+  `(,@systemd-font-lock-keywords-1
+    ("\\\\$" 0 'font-lock-warning-face) ; line break
+    ;; boolean arguments
+    (,(rx "=" (group (or "yes" "true" "on" "0" "no" "false" "off")) eol)
+     1 'font-lock-constant-face)
+    ;; specifiers
+    ("%[nNpPiIfcrRtuUhsmbHv%]" 0 'font-lock-constant-face)
+    ;; exec prefixes
+    ("="
+     (systemd-exec-prefix-anchored-matcher
+      nil nil (0 'font-lock-negation-char-face))))
+  "Extended expressions to highlight in `systemd-mode'.")
+
+(defvar systemd-font-lock-keywords 'systemd-font-lock-keywords-2
   "Default expressions to highlight in `systemd-mode'.
 See systemd.unit(5) for details on unit file syntax.")
 
@@ -322,7 +328,10 @@ Key bindings:
   (conf-mode-initialize systemd-comment-start)
   (add-hook 'company-backends #'systemd-company-backend)
   (add-hook 'completion-at-point-functions #'systemd-complete-at-point nil t)
-  (setq font-lock-defaults '(systemd-font-lock-keywords t)))
+  (setq font-lock-defaults
+        '((systemd-font-lock-keywords
+           systemd-font-lock-keywords-1 systemd-font-lock-keywords-2)
+          t)))
 
 (provide 'systemd)
 
