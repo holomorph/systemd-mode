@@ -275,6 +275,8 @@ See `font-lock-keywords' and (info \"(elisp) Search-based Fontification\")."
     ;; boolean arguments
     (,(rx "=" (group (or "yes" "true" "on" "0" "no" "false" "off")) eol)
      1 'font-lock-constant-face)
+    ;; environment variables
+    ("\\$[A-Z_]+\\>" 0 'font-lock-variable-name-face)
     ;; specifiers
     ("%[nNpPiIfcrRtuUhsmbHv%]" 0 'font-lock-constant-face)
     ;; exec prefixes
@@ -290,6 +292,7 @@ See systemd.unit(5) for details on unit file syntax.")
 (defvar systemd-mode-syntax-table
   (let ((table (make-syntax-table)))
     (modify-syntax-entry ?% "/" table)
+    (modify-syntax-entry ?$ "'" table)
     table)
   "Syntax table used in `systemd-mode' buffers.")
 
