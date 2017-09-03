@@ -283,7 +283,7 @@ See systemd.unit(5) for details on unit file syntax.")
 
 (defvar systemd-mode-syntax-table
   (let ((table (make-syntax-table)))
-    (modify-syntax-entry ?\% "\\" table)
+    (modify-syntax-entry ?% "/" table)
     table)
   "Syntax table used in `systemd-mode' buffers.")
 
