@@ -275,14 +275,14 @@ See `font-lock-keywords' and (info \"(elisp) Search-based Fontification\")."
     ;; boolean arguments
     (,(rx "=" (group (or "yes" "true" "on" "0" "no" "false" "off")) eol)
      1 'font-lock-constant-face)
-    ;; environment variables
-    ("\\$[A-Z_]+\\>" 0 'font-lock-variable-name-face)
-    ;; specifiers
-    ("%[nNpPiIfcrRtuUhsmbHv%]" 0 'font-lock-constant-face)
-    ;; exec prefixes
     ("="
+     ;; exec prefixes
      (systemd-exec-prefix-anchored-matcher
-      nil nil (0 'font-lock-negation-char-face))))
+      nil nil (0 'font-lock-negation-char-face))
+     ;; environment variables
+     ("\\$[A-Z_]+\\>" nil nil (0 'font-lock-variable-name-face))
+     ;; specifiers
+     ("%[nNpPiIfcrRtuUhsmbHv%]" nil nil (0 'font-lock-constant-face))))
   "Extended expressions to highlight in `systemd-mode'.")
 
 (defconst systemd-font-lock-keywords-3
