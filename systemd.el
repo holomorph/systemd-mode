@@ -285,6 +285,29 @@ See `font-lock-keywords' and (info \"(elisp) Search-based Fontification\")."
       nil nil (0 'font-lock-negation-char-face))))
   "Extended expressions to highlight in `systemd-mode'.")
 
+(defconst systemd-font-lock-keywords-3
+  `(,@systemd-font-lock-keywords-2
+    ("^Type=\\(simple\\|forking\\|oneshot\\|dbus\\|notify\\|idle\\)$"
+     1 'font-lock-builtin-face)
+    (,(rx bol "Restart="
+          (group (or "no" "on-success" "on-failure"
+                     "on-abnormal" "on-watchdog" "on-abort" "always"))
+          eol)
+     1 'font-lock-builtin-face)
+    ("^KillMode=\\(control-group\\|process\\|mixed\\|none\\)$"
+     1 'font-lock-builtin-face)
+    (,(eval-when-compile
+        (concat
+         "^KillSignal="
+         (regexp-opt
+          '("SIGHUP" "SIGINT" "SIGQUIT" "SIGILL" "SIGABRT" "SIGFPE" "SIGKILL"
+            "SIGSEGV" "SIGPIPE" "SIGALRM" "SIGTERM" "SIGUSR1" "SIGUSR2"
+            "SIGCHLD" "SIGCONT" "SIGSTOP" "SIGTSTP" "SIGTTIN" "SIGTTOU")
+          t)
+         "$"))
+     1 'font-lock-constant-face))
+  "Flamboyant expressions to highlight in `systemd-mode'.")
+
 (defvar systemd-font-lock-keywords 'systemd-font-lock-keywords-2
   "Default expressions to highlight in `systemd-mode'.
 See systemd.unit(5) for details on unit file syntax.")
@@ -333,7 +356,9 @@ Key bindings:
   (add-hook 'completion-at-point-functions #'systemd-complete-at-point nil t)
   (setq font-lock-defaults
         '((systemd-font-lock-keywords
-           systemd-font-lock-keywords-1 systemd-font-lock-keywords-2)
+           systemd-font-lock-keywords-1
+           systemd-font-lock-keywords-2
+           systemd-font-lock-keywords-3)
           t)))
 
 (provide 'systemd)
