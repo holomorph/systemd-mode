@@ -24,7 +24,7 @@
 
 ;; Major mode for editing systemd units.
 
-;; Similar to `conf-mode' but with added highlighting; e.g. for
+;; Similar to `conf-mode' but with enhanced highlighting; e.g. for
 ;; specifiers and booleans.  Employs strict regex for whitespace.
 ;; Features a facility for browsing documentation: use C-c C-o to open
 ;; links to documentation in a unit (cf. systemctl help).
@@ -258,8 +258,27 @@ See `font-lock-keywords' and (info \"(elisp) Search-based Fontification\")."
     (`candidates (all-completions arg (systemd-completion-table nil)))
     (`post-completion (if (not (systemd-buffer-section-p)) (insert "=")))))
 
+(defun systemd-construct-start-p ()
+  "Return non-nil if the current line is the first in a multi-line construct."
+  (let ((flag t))
+    (save-excursion
+      (while (and (zerop (forward-line -1))
+                  (eq ?\\ (char-before (line-end-position)))
+                  (skip-chars-forward " \t")
+                  (setq flag (memq (following-char) '(?# ?\;))))))
+    flag))
+
+(defun systemd-comment-matcher (limit)
+  "Matcher for comments.
+Only matches comments on lines passing `systemd-construct-start-p'."
+  (let ((re "^[ \t]*?\\([#;]\\)\\(.*\\)$")
+        match)
+    (while (and (setq match (re-search-forward re limit t))
+                (not (systemd-construct-start-p))))
+    match))
+
 (defconst systemd-font-lock-keywords-1
-  `(("^[[:space:]]*?\\([#;]\\)\\(.*\\)$"
+  `((systemd-comment-matcher
      (1 'font-lock-comment-delimiter-face)
      (2 'font-lock-comment-face))
     ;; sections
@@ -354,6 +373,7 @@ Key bindings:
   (conf-mode-initialize systemd-comment-start)
   (add-hook 'company-backends #'systemd-company-backend)
   (add-hook 'completion-at-point-functions #'systemd-complete-at-point nil t)
+  (setq-local jit-lock-contextually t)
   (setq font-lock-defaults
         '((systemd-font-lock-keywords
            systemd-font-lock-keywords-1
