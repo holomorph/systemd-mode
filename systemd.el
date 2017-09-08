@@ -202,21 +202,6 @@ file, defaulting to the link under point, if any."
   (interactive)
   (systemd-doc-man "systemd.directives(7)"))
 
-(defun systemd-exec-prefix-anchored-matcher (limit)
-  "Matcher for the exec prefix in anchored font-lock rule.
-See `font-lock-keywords' and (info \"(elisp) Search-based Fontification\")."
-  (let ((pos (car (match-data)))
-        (prefixes '(?- ?@ ?+))
-        char end res)
-    (while (and (memq (setq char (following-char)) prefixes)
-                (< (point) limit))
-      (forward-char)
-      (setq prefixes (remq char prefixes))
-      (setq end (point-marker)))
-    (when end
-      (prog1 (setq res (list (1+ pos) end))
-        (set-match-data res)))))
-
 (defun systemd-buffer-section-p ()
   "Return t if current line begins with \"[\", otherwise nil."
   (= (char-after (line-beginning-position)) ?\[))
@@ -276,6 +261,21 @@ Only matches comments on lines passing `systemd-construct-start-p'."
     (while (and (setq match (re-search-forward re limit t))
                 (not (systemd-construct-start-p))))
     match))
+
+(defun systemd-exec-prefix-anchored-matcher (limit)
+  "Matcher for the exec prefix in anchored font-lock rule.
+See `font-lock-keywords' and (info \"(elisp) Search-based Fontification\")."
+  (let ((pos (car (match-data)))
+        (prefixes '(?- ?@ ?+))
+        char end res)
+    (while (and (memq (setq char (following-char)) prefixes)
+                (< (point) limit))
+      (forward-char)
+      (setq prefixes (remq char prefixes))
+      (setq end (point-marker)))
+    (when end
+      (prog1 (setq res (list (1+ pos) end))
+        (set-match-data res)))))
 
 (defconst systemd-font-lock-keywords-1
   `((systemd-comment-matcher
