@@ -253,14 +253,27 @@ file, defaulting to the link under point, if any."
                   (setq flag (memq (following-char) '(?# ?\;))))))
     flag))
 
-(defun systemd-comment-matcher (limit)
-  "Matcher for comments.
-Only matches comments on lines passing `systemd-construct-start-p'."
-  (let ((re "^[ \t]*?\\([#;]\\)\\(.*\\)$")
-        match)
-    (while (and (setq match (re-search-forward re limit t))
-                (not (systemd-construct-start-p))))
-    match))
+(defmacro define-systemd-matcher (name regexp &optional docstring)
+  "Define a new function NAME that matches REGEXP in a multi-line construct.
+Only returns matches of REGEXP on lines passing `systemd-construct-start-p'."
+  (declare (debug (symbolp stringp &optional stringp))
+           (indent 2) (doc-string 3))
+  `(defun ,name (limit)
+     ,docstring
+     (let (match)
+       (while (and (setq match (re-search-forward ,regexp limit t))
+                   (not (systemd-construct-start-p))))
+       match)))
+
+(define-systemd-matcher systemd-comment-matcher "^[ \t]*?\\([#;]\\)\\(.*\\)$"
+  "Matcher for comments. ")
+
+(define-systemd-matcher systemd-section-matcher
+    "^\\(\\[\\([[:upper:]][[:alnum:]]+\\|X-.*?\\)\\]\\)"
+  "Matcher for section titles.")
+
+(define-systemd-matcher systemd-key-matcher "^\\([[:upper:]][[:alnum:]]+\\)="
+  "Matcher for keys (unit directives).")
 
 (defun systemd-exec-prefix-anchored-matcher (limit)
   "Matcher for the exec prefix in anchored font-lock rule.
@@ -281,11 +294,8 @@ See `font-lock-keywords' and (info \"(elisp) Search-based Fontification\")."
   `((systemd-comment-matcher
      (1 'font-lock-comment-delimiter-face)
      (2 'font-lock-comment-face))
-    ;; sections
-    ("^\\(\\[\\([[:upper:]][[:alnum:]]+\\|X-.*?\\)\\]\\)"
-     1 'font-lock-type-face)
-    ;; keys
-    ("^\\([[:upper:]][[:alnum:]]+\\)=" 1 'font-lock-keyword-face))
+    (systemd-section-matcher 1 'font-lock-type-face)
+    (systemd-key-matcher 1 'font-lock-keyword-face))
   "Minimal expressions to highlight in `systemd-mode'.")
 
 (defconst systemd-font-lock-keywords-2
