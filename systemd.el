@@ -346,15 +346,12 @@ See `font-lock-keywords' and (info \"(elisp) Search-based Fontification\")."
      1 'font-lock-builtin-face)
     ("^KillMode=\\(control-group\\|process\\|mixed\\|none\\)$"
      1 'font-lock-builtin-face)
-    (,(eval-when-compile
-        (concat
-         "^KillSignal="
-         (regexp-opt
-          '("SIGHUP" "SIGINT" "SIGQUIT" "SIGILL" "SIGABRT" "SIGFPE" "SIGKILL"
-            "SIGSEGV" "SIGPIPE" "SIGALRM" "SIGTERM" "SIGUSR1" "SIGUSR2"
-            "SIGCHLD" "SIGCONT" "SIGSTOP" "SIGTSTP" "SIGTTIN" "SIGTTOU")
-          t)
-         "$"))
+    (,(rx bol "KillSignal="
+          (group
+           (or "SIGHUP" "SIGINT" "SIGQUIT" "SIGILL" "SIGABRT" "SIGFPE" "SIGKILL"
+               "SIGSEGV" "SIGPIPE" "SIGALRM" "SIGTERM" "SIGUSR1" "SIGUSR2"
+               "SIGCHLD" "SIGCONT" "SIGSTOP" "SIGTSTP" "SIGTTIN" "SIGTTOU"))
+          eol)
      1 'font-lock-constant-face))
   "Flamboyant expressions to highlight in `systemd-mode'.")
 
