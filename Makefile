@@ -1,6 +1,6 @@
 SRC = systemd.el
 DATA = unit-directives.txt network-directives.txt nspawn-directives.txt
-DISTFILES := Makefile $(SRC) $(DATA) LICENSE README systemd-pkg.el tests
+DISTFILES := Makefile $(SRC) $(DATA) LICENSE README systemd-pkg.el test
 
 VERSION := $(shell awk '/^;; Version:/ {print $$3}' $(SRC))
 
@@ -18,9 +18,9 @@ systemd-pkg.el: $(SRC)
 
 systemd.elc: $(DATA)
 
-check: tests/systemd-tests.el systemd.elc
+check: test/systemd-tests.el systemd.elc
 	@$(EMACS) -Q --batch -L . --eval "(progn \
-		(load-file \"tests/systemd-tests.el\") \
+		(load-file \"test/systemd-tests.el\") \
 		(ert-run-tests-batch-and-exit))"
 
 clean:
