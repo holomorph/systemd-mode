@@ -44,6 +44,9 @@
 (declare-function company-begin-backend "company")
 (declare-function company-grab-symbol "company")
 
+(defvar font-lock-beg)
+(defvar font-lock-end)
+
 (defgroup systemd ()
   "Major mode for editing systemd units."
   :link '(url-link "http://www.freedesktop.org/wiki/Software/systemd/")
@@ -253,6 +256,30 @@ file, defaulting to the link under point, if any."
                   (setq flag (memq (following-char) '(?# ?\;))))))
     flag))
 
+(defun systemd-syntax-propertize (start end)
+  "`systemd-propertize-function' for `systemd-mode' buffers."
+  (let ((case-fold-search nil))
+    (goto-char start)
+    (funcall
+     (syntax-propertize-rules
+      ("^[ \t]*\\([;#]\\)$?"
+       (1 (when (systemd-construct-start-p) (string-to-syntax "<")))))
+     start end)))
+
+(defun systemd-font-lock-extend-region ()
+  (goto-char font-lock-beg)
+  (while (and (zerop (forward-line -1))
+              (= (char-before (line-end-position)) ?\\)
+              (skip-chars-forward " \t")
+              (not (memq (following-char) '(?# ?\;)))))
+  (setq font-lock-beg (point-marker))
+  (goto-char font-lock-end)
+  (while (and (= (char-before (line-end-position)) ?\\)
+              (skip-chars-forward " \t")
+              (not (memq (following-char) '(?# ?\;)))
+              (zerop (forward-line))))
+  (setq font-lock-end (line-end-position)))
+
 (defmacro define-systemd-matcher (name regexp &optional docstring)
   "Define a new function NAME that matches REGEXP in a multi-line construct.
 Only returns matches of REGEXP on lines passing `systemd-construct-start-p'."
@@ -264,9 +291,6 @@ Only returns matches of REGEXP on lines passing `systemd-construct-start-p'."
        (while (and (setq match (re-search-forward ,regexp limit t))
                    (not (systemd-construct-start-p))))
        match)))
-
-(define-systemd-matcher systemd-comment-matcher "^[ \t]*?\\([#;]\\)\\(.*\\)$"
-  "Matcher for comments. ")
 
 (define-systemd-matcher systemd-section-matcher
     "^\\(\\[\\([[:upper:]][[:alnum:]]+\\|X-.*?\\)\\]\\)"
@@ -291,10 +315,7 @@ See `font-lock-keywords' and (info \"(elisp) Search-based Fontification\")."
         (set-match-data res)))))
 
 (defconst systemd-font-lock-keywords-1
-  `((systemd-comment-matcher
-     (1 'font-lock-comment-delimiter-face)
-     (2 'font-lock-comment-face))
-    (systemd-section-matcher 1 'font-lock-type-face)
+  `((systemd-section-matcher 1 'font-lock-type-face)
     (systemd-key-matcher 1 'font-lock-keyword-face))
   "Minimal expressions to highlight in `systemd-mode'.")
 
@@ -345,6 +366,7 @@ See systemd.unit(5) for details on unit file syntax.")
   (let ((table (make-syntax-table)))
     (modify-syntax-entry ?% "/" table)
     (modify-syntax-entry ?$ "'" table)
+    (modify-syntax-entry ?\; "." table)
     table)
   "Syntax table used in `systemd-mode' buffers.")
 
@@ -381,15 +403,17 @@ Key bindings:
 \\{systemd-mode-map}"
   (set-keymap-parent systemd-mode-map nil)
   (conf-mode-initialize systemd-comment-start)
+  (setq-local auto-fill-inhibit-regexp "^[ \t]*?[^;#]")
   (add-hook 'company-backends #'systemd-company-backend)
   (add-hook 'completion-at-point-functions #'systemd-complete-at-point nil t)
-  (setq-local jit-lock-contextually t)
+  (add-hook 'font-lock-extend-region-functions
+            'systemd-font-lock-extend-region nil t)
+  (setq-local syntax-propertize-function #'systemd-syntax-propertize)
   (setq font-lock-defaults
         '((systemd-font-lock-keywords
            systemd-font-lock-keywords-1
            systemd-font-lock-keywords-2
-           systemd-font-lock-keywords-3)
-          t)))
+           systemd-font-lock-keywords-3))))
 
 (provide 'systemd)
 
