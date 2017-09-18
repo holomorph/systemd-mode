@@ -266,6 +266,14 @@ file, defaulting to the link under point, if any."
        (1 (when (systemd-construct-start-p) (string-to-syntax "<")))))
      start end)))
 
+(defun systemd-value-extend-region ()
+  "Return the EOL position of the last line of the construct at point."
+  (while (and (= (char-before (line-end-position)) ?\\)
+              (skip-chars-forward " \t")
+              (not (memq (following-char) '(?# ?\;)))
+              (zerop (forward-line))))
+  (line-end-position))
+
 (defun systemd-font-lock-extend-region ()
   (goto-char font-lock-beg)
   (while (and (zerop (forward-line -1))
@@ -274,11 +282,7 @@ file, defaulting to the link under point, if any."
               (not (memq (following-char) '(?# ?\;)))))
   (setq font-lock-beg (point-marker))
   (goto-char font-lock-end)
-  (while (and (= (char-before (line-end-position)) ?\\)
-              (skip-chars-forward " \t")
-              (not (memq (following-char) '(?# ?\;)))
-              (zerop (forward-line))))
-  (setq font-lock-end (line-end-position)))
+  (setq font-lock-end (systemd-value-extend-region)))
 
 (defmacro define-systemd-matcher (name regexp &optional docstring)
   "Define a new function NAME that matches REGEXP in a multi-line construct.
@@ -330,9 +334,11 @@ See `font-lock-keywords' and (info \"(elisp) Search-based Fontification\")."
      (systemd-exec-prefix-anchored-matcher
       nil nil (0 'font-lock-negation-char-face))
      ;; environment variables
-     ("\\$[A-Z_]+\\>" nil nil (0 'font-lock-variable-name-face))
+     ("\\$[A-Z_]+\\>"
+      (systemd-value-extend-region) nil (0 'font-lock-variable-name-face))
      ;; specifiers
-     ("%[nNpPiIfcrRtuUhsmbHv%]" nil nil (0 'font-lock-constant-face))))
+     ("%[nNpPiIfcrRtuUhsmbHv%]"
+      (systemd-value-extend-region) nil (0 'font-lock-constant-face))))
   "Extended expressions to highlight in `systemd-mode'.")
 
 (defconst systemd-font-lock-keywords-3
