@@ -24,7 +24,7 @@ check: test/systemd-tests.el systemd.elc
 		(ert-run-tests-batch-and-exit))"
 
 clean:
-	$(RM) $(SRC:.el=.elc)
+	$(RM) $(SRC:.el=.elc) systemd-pkg.el
 
 dist: clean systemd-pkg.el
 	mkdir systemd-$(VERSION)
