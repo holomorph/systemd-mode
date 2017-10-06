@@ -11,6 +11,7 @@ Personality
 MachineID
 PrivateUsers
 NotifyReady
+SystemCallFilter
 ReadOnly
 Volatile
 Bind
