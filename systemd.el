@@ -1,6 +1,6 @@
 ;;; systemd.el --- Major mode for editing systemd units -*- lexical-binding: t -*-
 
-;; Copyright (C) 2014-2017  Mark Oteiza <mvoteiza@udel.edu>
+;; Copyright (C) 2014-2018  Mark Oteiza <mvoteiza@udel.edu>
 
 ;; Author: Mark Oteiza <mvoteiza@udel.edu>
 ;; Version: 1.6
