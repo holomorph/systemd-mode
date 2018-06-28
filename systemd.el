@@ -337,7 +337,7 @@ See `font-lock-keywords' and (info \"(elisp) Search-based Fontification\")."
      ("\\$[A-Z_]+\\>"
       (systemd-value-extend-region) nil (0 'font-lock-variable-name-face))
      ;; specifiers
-     ("%[bcCfhHiILmnNpPrRsStuUv%]"
+     ("%[bcCEfhHiIjJLmnNpPrRsStTuUvV%]"
       (systemd-value-extend-region) nil (0 'font-lock-constant-face))))
   "Extended expressions to highlight in `systemd-mode'.")
 
