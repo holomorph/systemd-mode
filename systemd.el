@@ -230,21 +230,22 @@ file, defaulting to the link under point, if any."
       (if sectionp systemd-network-sections systemd-network-directives))
      (t (if sectionp systemd-unit-sections systemd-unit-directives)))))
 
+(defun systemd-env-variable-table (&rest _ignore)
+  "Completion table with environment variables."
+  (mapcar (lambda (x) (substring x 0 (string-match "=" x))) process-environment))
+
 (defun systemd-complete-at-point ()
   "Complete the symbol at point."
-  (let ((bounds (bounds-of-thing-at-point 'symbol)))
-    (list (or (car bounds) (point))
-          (or (cdr bounds) (point))
-          (completion-table-dynamic #'systemd-completion-table))))
-
-(defun systemd-company-backend (command &optional arg &rest _ignored)
-  "Backend for `company-mode' in `systemd-mode' buffers."
-  (interactive (list 'interactive))
-  (pcase command
-    (`interactive (company-begin-backend 'systemd-company-backend))
-    (`prefix (and (eq major-mode 'systemd-mode) (company-grab-symbol)))
-    (`candidates (all-completions arg (systemd-completion-table nil)))
-    (`post-completion (if (not (systemd-buffer-section-p)) (insert "=")))))
+  (when-let* ((bounds (bounds-of-thing-at-point 'symbol)))
+    (list (car bounds) (cdr bounds)
+          (completion-table-in-turn
+           (completion-table-dynamic #'systemd-completion-table)
+           (completion-table-dynamic #'systemd-env-variable-table))
+          :exit-function
+          (lambda (_ finished)
+            (when (and (not (systemd-buffer-section-p))
+                       (memq finished '(sole finished)))
+              (insert "="))))))
 
 (defun systemd-construct-start-p ()
   "Return non-nil if the current line is the first in a multi-line construct."
@@ -407,6 +408,8 @@ Key bindings:
   (set-keymap-parent systemd-mode-map nil)
   (conf-mode-initialize systemd-comment-start)
   (setq-local auto-fill-inhibit-regexp "^[ \t]*?[^;#]")
+  (make-local-variable 'company-backends)
+  (cl-pushnew 'company-capf company-backends)
   (add-hook 'completion-at-point-functions #'systemd-complete-at-point nil t)
   (add-hook 'font-lock-extend-region-functions
             'systemd-font-lock-extend-region nil t)
