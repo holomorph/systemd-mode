@@ -407,7 +407,7 @@ Key bindings:
   (set-keymap-parent systemd-mode-map nil)
   (conf-mode-initialize systemd-comment-start)
   (setq-local auto-fill-inhibit-regexp "^[ \t]*?[^;#]")
-  (add-hook 'company-backends #'systemd-company-backend)
+  (add-hook 'company-backends #'systemd-company-backend nil 'local)
   (add-hook 'completion-at-point-functions #'systemd-complete-at-point nil t)
   (add-hook 'font-lock-extend-region-functions
             'systemd-font-lock-extend-region nil t)
