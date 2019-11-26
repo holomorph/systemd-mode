@@ -26,7 +26,7 @@
 
 (ert-deftest test-normal-autoloads ()
   "Tests for `systemd-autoload-regexp'.
-This should match unit names: alpha-numeric ascii base names,
+This should match unit names: alphanumeric ascii base names,
 with exceptions in the set [-_.@\\]. Extensions are a prescribed
 list.  Some from systemd.unit(5) are excluded intentionally;
 e.g. scope files which are created programmatically."
