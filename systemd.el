@@ -81,7 +81,7 @@
 
 (defconst systemd-unit-sections
   '("Unit" "Install" "Service")
-  "Configuration sections for systemd 225.")
+  "Configuration sections for systemd 244.")
 
 (defconst systemd-unit-directives
   (eval-when-compile
@@ -94,10 +94,13 @@
   "Configuration directives for systemd.")
 
 (defconst systemd-network-sections
-  '("Match" "Link" "NetDev" "VLAN" "MACVLAN" "MACVTAP" "IPVLAN" "VXLAN"
+  '("Match" "Link" "NetDev" "VLAN" "MACVLAN" "MACVTAP" "IPVLAN" "IPVTAP" "VXLAN"
+    "GENEVE" "L2TP" "L2TPsession" "MACsec" "FooOverUDP"
     "Tunnel" "Peer" "Tun" "Tap" "Bond" "Network" "Address" "Route" "DHCP"
-    "Bridge" "BridgeFDB")
-  "Network configuration sections for systemd 225.")
+    "Neighbor" "IPv6AddressLabel" "RoutingPolicyRule" "NextHop" "DHCPv4"
+    "DHCPv6" "IPv6AcceptRA" "DHCPServer" "IPv6Prefix" "CAN" 
+    "Bridge" "BridgeFDB" "BridgeVLAN" "VXCAN" "WireGuard" "WireGuardPeer")
+  "Network configuration sections for systemd 244 (not exhaustive).")
 
 (defconst systemd-network-directives
   (eval-when-compile
@@ -111,7 +114,7 @@
 
 (defconst systemd-nspawn-sections
   '("Exec" "Files" "Network")
-  "Namespace container configuration sections for systemd 232.")
+  "Namespace container configuration sections for systemd 244.")
 
 (defconst systemd-nspawn-directives
   (eval-when-compile
