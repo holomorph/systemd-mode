@@ -399,7 +399,7 @@ See systemd.unit(5) for details on unit file syntax.")
 ;;;###autoload
 (define-derived-mode systemd-mode conf-mode "Systemd"
   "Major mode for editing systemd unit files.
-See http://www.freedesktop.org/wiki/Software/systemd/ for more
+See https://www.freedesktop.org/wiki/Software/systemd/ for more
 information about systemd.
 
 In addition to any hooks its parent mode might have run, this
