@@ -1,6 +1,6 @@
 ;;; systemd-tests.el --- Tests for systemd.el -*- lexical-binding: t -*-
 
-;; Copyright (C) 2016-2017  Mark Oteiza <mvoteiza@udel.edu>
+;; Copyright (C) 2016-2020  Mark Oteiza <mvoteiza@udel.edu>
 
 ;; Author: Mark Oteiza <mvoteiza@udel.edu>
 
