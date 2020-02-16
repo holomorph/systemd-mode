@@ -130,7 +130,7 @@
 (defconst systemd-autoload-regexp
   (eval-when-compile
     (rx (+? (any "a-zA-Z0-9-_.@\\")) "."
-        (or "automount" "busname" "mount" "service" "slice"
+        (or "automount" "busname" "mount" "path" "service" "slice"
             "socket" "swap" "target" "timer" "link" "netdev" "network")
         string-end))
   "Regexp for file buffers in which to autoload `systemd-mode'.")
@@ -140,7 +140,7 @@
   (eval-when-compile
     (rx ".#"
         (or (and (+? (any "a-zA-Z0-9-_.@\\")) "."
-                 (or "automount" "busname" "mount" "service" "slice"
+                 (or "automount" "busname" "mount" "path" "service" "slice"
                      "socket" "swap" "target" "timer" "link" "netdev" "network"))
             "override.conf")
         (= 16 (char hex-digit)) string-end))
