@@ -88,7 +88,9 @@
     (with-temp-buffer
       (insert-file-contents
        (let ((f "unit-directives.txt"))
-         (if (null load-file-name) f
+         (if (or (null load-file-name)
+                 (bound-and-true-p comp-async-compilation))
+             f
            (expand-file-name f (file-name-directory load-file-name)))))
       (split-string (buffer-string))))
   "Configuration directives for systemd.")
@@ -107,7 +109,9 @@
     (with-temp-buffer
       (insert-file-contents
        (let ((f "network-directives.txt"))
-         (if (null load-file-name) f
+         (if (or (null load-file-name)
+                 (bound-and-true-p comp-async-compilation))
+             f
            (expand-file-name f (file-name-directory load-file-name)))))
       (split-string (buffer-string))))
   "Network configuration directives for systemd.")
@@ -121,7 +125,9 @@
     (with-temp-buffer
       (insert-file-contents
        (let ((f "nspawn-directives.txt"))
-         (if (null load-file-name) f
+         (if (or (null load-file-name)
+                 (bound-and-true-p comp-async-compilation))
+             f
            (expand-file-name f (file-name-directory load-file-name)))))
       (split-string (buffer-string))))
   "Namespace container configuration directives for systemd.")
