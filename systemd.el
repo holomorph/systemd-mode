@@ -3,7 +3,7 @@
 ;; Copyright (C) 2014-2023  Mark Oteiza <mvoteiza@udel.edu>
 
 ;; Author: Mark Oteiza <mvoteiza@udel.edu>
-;; Version: 1.6
+;; Version: 1.6.1
 ;; Package-Requires: ((emacs "24.4"))
 ;; Keywords: tools, unix
 
@@ -33,7 +33,8 @@
 ;; network configuration.  Both a completer for
 ;; `completion-at-point-functions' and a company backend are provided.
 ;; The latter can be enabled by adding `company-mode' to
-;; `systemd-mode-hook'.
+;; `systemd-mode-hook' and adding `systemd-company-backend' to
+;; `company-backends'.
 
 ;;; Code:
 
@@ -406,7 +407,6 @@ Key bindings:
   (set-keymap-parent systemd-mode-map nil)
   (conf-mode-initialize systemd-comment-start)
   (setq-local auto-fill-inhibit-regexp "^[ \t]*?[^;#]")
-  (add-hook 'company-backends #'systemd-company-backend nil 'local)
   (add-hook 'completion-at-point-functions #'systemd-complete-at-point nil t)
   (add-hook 'font-lock-extend-region-functions
             'systemd-font-lock-extend-region nil t)
