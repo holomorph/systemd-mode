@@ -1,6 +1,6 @@
 ;;; systemd.el --- Major mode for editing systemd units -*- lexical-binding: t -*-
 
-;; Copyright (C) 2014-2021  Mark Oteiza <mvoteiza@udel.edu>
+;; Copyright (C) 2014-2023  Mark Oteiza <mvoteiza@udel.edu>
 
 ;; Author: Mark Oteiza <mvoteiza@udel.edu>
 ;; Version: 1.6
@@ -49,7 +49,7 @@
 
 (defgroup systemd ()
   "Major mode for editing systemd units."
-  :link '(url-link "http://www.freedesktop.org/wiki/Software/systemd/")
+  :link '(url-link "https://www.freedesktop.org/wiki/Software/systemd/")
   :group 'tools)
 
 (defcustom systemd-browse-url-function 'browse-url
@@ -236,7 +236,7 @@ file, defaulting to the link under point, if any."
           (or (cdr bounds) (point))
           (completion-table-dynamic #'systemd-completion-table))))
 
-(defun systemd-company-backend (command &optional arg &rest ignored)
+(defun systemd-company-backend (command &optional arg &rest _ignored)
   "Backend for `company-mode' in `systemd-mode' buffers."
   (interactive (list 'interactive))
   (pcase command
