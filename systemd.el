@@ -235,7 +235,8 @@ file, defaulting to the link under point, if any."
   (let ((bounds (bounds-of-thing-at-point 'symbol)))
     (list (or (car bounds) (point))
           (or (cdr bounds) (point))
-          (completion-table-dynamic #'systemd-completion-table))))
+          (completion-table-dynamic #'systemd-completion-table)
+          :exclusive 'no)))
 
 (defun systemd-company-backend (command &optional arg &rest _ignored)
   "Backend for `company-mode' in `systemd-mode' buffers."
