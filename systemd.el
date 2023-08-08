@@ -253,7 +253,8 @@ file, defaulting to the link under point, if any."
           (lambda (_ finished)
             (when (and (not (systemd-buffer-section-p))
                        (memq finished '(sole finished)))
-              (insert "="))))))
+              (insert "=")))
+          :exclusive 'no)))
 
 (defun systemd-construct-start-p ()
   "Return non-nil if the current line is the first in a multi-line construct."
