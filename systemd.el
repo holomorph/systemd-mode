@@ -417,8 +417,9 @@ Key bindings:
   (set-keymap-parent systemd-mode-map nil)
   (conf-mode-initialize systemd-comment-start)
   (setq-local auto-fill-inhibit-regexp "^[ \t]*?[^;#]")
-  (make-local-variable 'company-backends)
-  (cl-pushnew 'company-capf company-backends)
+  (with-eval-after-load 'company
+    (make-local-variable 'company-backends)
+    (cl-pushnew 'company-capf company-backends))
   (add-hook 'completion-at-point-functions #'systemd-complete-at-point nil t)
   (add-hook 'font-lock-extend-region-functions
             'systemd-font-lock-extend-region nil t)
