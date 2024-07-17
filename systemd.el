@@ -89,7 +89,9 @@
     (with-temp-buffer
       (insert-file-contents
        (let ((f "unit-directives.txt"))
-         (if (null load-file-name) f
+         (if (or (null load-file-name)
+                 (bound-and-true-p comp-async-compilation))
+             f
            (expand-file-name f (file-name-directory load-file-name)))))
       (split-string (buffer-string))))
   "Configuration directives for systemd.")
@@ -108,7 +110,9 @@
     (with-temp-buffer
       (insert-file-contents
        (let ((f "network-directives.txt"))
-         (if (null load-file-name) f
+         (if (or (null load-file-name)
+                 (bound-and-true-p comp-async-compilation))
+             f
            (expand-file-name f (file-name-directory load-file-name)))))
       (split-string (buffer-string))))
   "Network configuration directives for systemd.")
@@ -122,27 +126,31 @@
     (with-temp-buffer
       (insert-file-contents
        (let ((f "nspawn-directives.txt"))
-         (if (null load-file-name) f
+         (if (or (null load-file-name)
+                 (bound-and-true-p comp-async-compilation))
+             f
            (expand-file-name f (file-name-directory load-file-name)))))
       (split-string (buffer-string))))
   "Namespace container configuration directives for systemd.")
 
 ;;;###autoload
 (defconst systemd-autoload-regexp
-  (rx (+? (any "a-zA-Z0-9-_.@\\")) "."
-      (or "automount" "busname" "mount" "service" "slice"
-          "socket" "swap" "target" "timer" "link" "netdev" "network")
-      string-end)
+  (eval-when-compile
+    (rx (+? (any "a-zA-Z0-9-_.@\\")) "."
+        (or "automount" "busname" "mount" "path" "service" "slice"
+            "socket" "swap" "target" "timer" "link" "netdev" "network")
+        string-end))
   "Regexp for file buffers in which to autoload `systemd-mode'.")
 
 ;;;###autoload
 (defconst systemd-tempfn-autoload-regexp
-  (rx ".#"
-      (or (and (+? (any "a-zA-Z0-9-_.@\\")) "."
-               (or "automount" "busname" "mount" "service" "slice"
-                   "socket" "swap" "target" "timer" "link" "netdev" "network"))
-          "override.conf")
-      (= 16 (char hex-digit)) string-end)
+  (eval-when-compile
+    (rx ".#"
+        (or (and (+? (any "a-zA-Z0-9-_.@\\")) "."
+                 (or "automount" "busname" "mount" "path" "service" "slice"
+                     "socket" "swap" "target" "timer" "link" "netdev" "network"))
+            "override.conf")
+        (= 16 (char hex-digit)) string-end))
   "Regexp for temp file buffers in which to autoload `systemd-mode'.")
 
 ;;;###autoload
@@ -230,21 +238,23 @@ file, defaulting to the link under point, if any."
       (if sectionp systemd-network-sections systemd-network-directives))
      (t (if sectionp systemd-unit-sections systemd-unit-directives)))))
 
+(defun systemd-env-variable-table (&rest _ignore)
+  "Completion table with environment variables."
+  (mapcar (lambda (x) (substring x 0 (string-match "=" x))) process-environment))
+
 (defun systemd-complete-at-point ()
   "Complete the symbol at point."
-  (let ((bounds (bounds-of-thing-at-point 'symbol)))
-    (list (or (car bounds) (point))
-          (or (cdr bounds) (point))
-          (completion-table-dynamic #'systemd-completion-table))))
-
-(defun systemd-company-backend (command &optional arg &rest _ignored)
-  "Backend for `company-mode' in `systemd-mode' buffers."
-  (interactive (list 'interactive))
-  (pcase command
-    (`interactive (company-begin-backend 'systemd-company-backend))
-    (`prefix (and (eq major-mode 'systemd-mode) (company-grab-symbol)))
-    (`candidates (all-completions arg (systemd-completion-table nil)))
-    (`post-completion (if (not (systemd-buffer-section-p)) (insert "=")))))
+  (when-let* ((bounds (bounds-of-thing-at-point 'symbol)))
+    (list (car bounds) (cdr bounds)
+          (completion-table-in-turn
+           (completion-table-dynamic #'systemd-completion-table)
+           (completion-table-dynamic #'systemd-env-variable-table))
+          :exit-function
+          (lambda (_ finished)
+            (when (and (not (systemd-buffer-section-p))
+                       (memq finished '(sole finished)))
+              (insert "=")))
+          :exclusive 'no)))
 
 (defun systemd-construct-start-p ()
   "Return non-nil if the current line is the first in a multi-line construct."
@@ -407,6 +417,9 @@ Key bindings:
   (set-keymap-parent systemd-mode-map nil)
   (conf-mode-initialize systemd-comment-start)
   (setq-local auto-fill-inhibit-regexp "^[ \t]*?[^;#]")
+  (with-eval-after-load 'company
+    (make-local-variable 'company-backends)
+    (cl-pushnew 'company-capf company-backends))
   (add-hook 'completion-at-point-functions #'systemd-complete-at-point nil t)
   (add-hook 'font-lock-extend-region-functions
             'systemd-font-lock-extend-region nil t)
