@@ -127,11 +127,29 @@
       (split-string (buffer-string))))
   "Namespace container configuration directives for systemd.")
 
+(defconst systemd-podman-sections
+  '("Build" "Container" "Image" "Kube" "Pod" "Volume")
+  "Namespace container configuration sections for Podman Quadlets.
+See the man page `podman-systemd.unit(5)' for more details.")
+
+(defconst systemd-podman-directives
+  (eval-when-compile
+    (with-temp-buffer
+      (insert-file-contents
+       ;; https://github.com/containers/podman/blob/590445ce9d280fab3490b1009d6321533be36399/pkg/systemd/quadlet/quadlet.go#L53
+       (let ((f "podman-directives.txt"))
+         (if (null load-file-name) f
+           (expand-file-name f (file-name-directory load-file-name)))))
+      (split-string (buffer-string))))
+  "Namespace container configuration directives for Podman Quadlets.
+See the man page `podman-systemd.unit(5)' for more details.")
+
 ;;;###autoload
 (defconst systemd-autoload-regexp
   (rx (+? (any "a-zA-Z0-9-_.@\\")) "."
       (or "automount" "busname" "mount" "service" "slice"
-          "socket" "swap" "target" "timer" "link" "netdev" "network")
+          "socket" "swap" "target" "timer" "link" "netdev" "network"
+          "build" "container" "image" "kube" "pod" "volume")
       string-end)
   "Regexp for file buffers in which to autoload `systemd-mode'.")
 
@@ -140,7 +158,8 @@
   (rx ".#"
       (or (and (+? (any "a-zA-Z0-9-_.@\\")) "."
                (or "automount" "busname" "mount" "service" "slice"
-                   "socket" "swap" "target" "timer" "link" "netdev" "network"))
+                   "socket" "swap" "target" "timer" "link" "netdev" "network"
+                   "build" "container" "image" "kube" "network" "pod" "volume"))
           "override.conf")
       (= 16 (char hex-digit)) string-end)
   "Regexp for temp file buffers in which to autoload `systemd-mode'.")
@@ -219,11 +238,21 @@ file, defaulting to the link under point, if any."
   "Return non-nil if FILENAME has an nspawn extension, otherwise nil."
   (string-match-p (rx ".nspawn" string-end) filename))
 
+(defun systemd-file-podman-p (filename)
+  "Return non-nil if FILENAME has a Podman-related extension, otherwise nil."
+  (string-match-p (rx (or "build" "container" "image" "kube" "pod" "volume")
+                      string-end)
+                  filename))
+
 (defun systemd-completion-table (&rest _ignore)
   "Return a list of completion candidates."
   (let ((sectionp (systemd-buffer-section-p))
         (name (buffer-name)))
     (cond
+     ((systemd-file-podman-p name)
+      (if sectionp
+          (append systemd-podman-sections systemd-unit-sections)
+        (append systemd-podman-directives systemd-unit-directives)))
      ((systemd-file-nspawn-p name)
       (if sectionp systemd-nspawn-sections systemd-nspawn-directives))
      ((systemd-file-network-p name)
